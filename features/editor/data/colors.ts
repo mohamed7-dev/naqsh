@@ -1,4 +1,4 @@
-import * as material from "material-colors";
+import material from "material-colors";
 
 const COLORS = [
   material.red["500"],

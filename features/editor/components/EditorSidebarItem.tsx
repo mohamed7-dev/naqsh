@@ -1,15 +1,14 @@
 "use client";
 import React from "react";
 import { SidebarItem } from "../data/sidebarItems";
-import { useEditorStore } from "../store/editorStore";
 import { cn } from "@/lib/utils";
 import { Toggle } from "@/components/ui/toggle";
+import { useEditorContext } from "./EditorContext";
 
 type EditorSidebarItemProps = SidebarItem;
 function EditorSidebarItem(props: EditorSidebarItemProps) {
   const { ICON, title, id } = props;
-  const activeTool = useEditorStore((state) => state.activeTool);
-  const setActiveTool = useEditorStore((state) => state.setActiveTool);
+  const { activeTool, setActiveTool } = useEditorContext();
   const isActive = activeTool === id;
   const handleClick = () => {
     if (activeTool === id) setActiveTool("Select");

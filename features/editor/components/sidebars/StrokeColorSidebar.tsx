@@ -1,12 +1,14 @@
 import React from "react";
-import { useEditorStore } from "../../store/editorStore";
 import { ColorPalette } from "./ColorPalette";
+import { useEditorContext } from "../EditorContext";
+import { STROKE_COLOR } from "../../config/shape";
 
 function StrokeColorSidebar() {
-  const strokeColor = useEditorStore((state) => state.strokeColor);
-  const changeStrokeColor = useEditorStore((state) => state.changeStrokeColor);
+  const { editor } = useEditorContext();
+  const strokeColor = editor?.getActiveStrokeColor() || STROKE_COLOR;
+  const changeStrokeColor = editor?.changeStrokeColor;
   return (
-    <ColorPalette currentColor={strokeColor} onChange={changeStrokeColor} />
+    <ColorPalette currentColor={strokeColor} onChange={changeStrokeColor!} />
   );
 }
 

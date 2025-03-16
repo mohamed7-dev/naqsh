@@ -1,15 +1,11 @@
-import { Canvas, Circle, Polygon, Rect, Triangle } from "fabric";
+import { Canvas, Circle, FabricObject, Polygon, Rect, Triangle } from "fabric";
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
-  FILL_COLOR,
   RECTANGLE_OPTIONS,
-  STROKE_COLOR,
-  STROKE_DASH_ARRAY,
-  STROKE_WIDTH,
   TRIANGLE_OPTIONS,
 } from "../config/shape";
-import { addToCanvas } from "./utils";
+import { addToCanvas, isTextType } from "./utils";
 
 type ShapeProps = {
   fillColor?: string;
@@ -17,14 +13,32 @@ type ShapeProps = {
   strokeWidth?: number;
   strokeDashArray?: number[] | [];
 };
-const shapeFactory = (canvas: Canvas) => {
+
+type ShapeFactoryProps = {
+  canvas: Canvas;
+  selectedObjects: FabricObject[];
+  fillColor: string;
+  strokeColor: string;
+  setStrokeColor: (color: string) => void;
+  strokeWidth: number;
+  setStrokeWidth: (width: number) => void;
+  strokeDashArray: number[];
+  setStrokeDashArray: (array: number[]) => void;
+};
+const shapeFactory = (props: ShapeFactoryProps) => {
+  const {
+    canvas,
+    selectedObjects,
+    fillColor,
+    strokeColor,
+    setStrokeColor,
+    strokeWidth,
+    setStrokeWidth,
+    strokeDashArray,
+    setStrokeDashArray,
+  } = props;
   return {
-    addCircle: ({
-      fillColor = FILL_COLOR,
-      strokeColor = STROKE_COLOR,
-      strokeWidth = STROKE_WIDTH,
-      strokeDashArray = STROKE_DASH_ARRAY,
-    }: ShapeProps) => {
+    addCircle: () => {
       const circle = new Circle({
         ...CIRCLE_OPTIONS,
         fill: fillColor,
@@ -33,13 +47,9 @@ const shapeFactory = (canvas: Canvas) => {
         strokeDashArray: strokeDashArray,
       });
       addToCanvas(canvas, circle);
+      return circle;
     },
-    addSoftRectangle: ({
-      fillColor = FILL_COLOR,
-      strokeColor = STROKE_COLOR,
-      strokeWidth = STROKE_WIDTH,
-      strokeDashArray = STROKE_DASH_ARRAY,
-    }: ShapeProps) => {
+    addSoftRectangle: () => {
       const rect = new Rect({
         ...RECTANGLE_OPTIONS,
         rx: 50,
@@ -51,12 +61,7 @@ const shapeFactory = (canvas: Canvas) => {
       });
       addToCanvas(canvas, rect);
     },
-    addRectangle: ({
-      fillColor = FILL_COLOR,
-      strokeColor = STROKE_COLOR,
-      strokeWidth = STROKE_WIDTH,
-      strokeDashArray = STROKE_DASH_ARRAY,
-    }: ShapeProps) => {
+    addRectangle: () => {
       const rect = new Rect({
         ...RECTANGLE_OPTIONS,
         fill: fillColor,
@@ -66,12 +71,7 @@ const shapeFactory = (canvas: Canvas) => {
       });
       addToCanvas(canvas, rect);
     },
-    addTriangle: ({
-      fillColor = FILL_COLOR,
-      strokeColor = STROKE_COLOR,
-      strokeWidth = STROKE_WIDTH,
-      strokeDashArray = STROKE_DASH_ARRAY,
-    }: ShapeProps) => {
+    addTriangle: () => {
       const tri = new Triangle({
         ...TRIANGLE_OPTIONS,
         fill: fillColor,
@@ -81,12 +81,7 @@ const shapeFactory = (canvas: Canvas) => {
       });
       addToCanvas(canvas, tri);
     },
-    addInvertedTriangle: ({
-      fillColor = FILL_COLOR,
-      strokeColor = STROKE_COLOR,
-      strokeWidth = STROKE_WIDTH,
-      strokeDashArray = STROKE_DASH_ARRAY,
-    }: ShapeProps) => {
+    addInvertedTriangle: () => {
       const HEIGHT = TRIANGLE_OPTIONS.height;
       const WIDTH = TRIANGLE_OPTIONS.width;
       const tri = new Polygon(
@@ -105,12 +100,7 @@ const shapeFactory = (canvas: Canvas) => {
       );
       addToCanvas(canvas, tri);
     },
-    addDiamond: ({
-      fillColor = FILL_COLOR,
-      strokeColor = STROKE_COLOR,
-      strokeWidth = STROKE_WIDTH,
-      strokeDashArray = STROKE_DASH_ARRAY,
-    }: ShapeProps) => {
+    addDiamond: () => {
       const HEIGHT = DIAMOND_OPTIONS.height;
       const WIDTH = DIAMOND_OPTIONS.width;
       const object = new Polygon(
@@ -129,6 +119,50 @@ const shapeFactory = (canvas: Canvas) => {
         }
       );
       addToCanvas(canvas, object);
+    },
+    changeStrokeColor: (value: string) => {
+      setStrokeColor(value);
+      canvas.getActiveObjects().forEach((object) => {
+        // make sure object type is not text
+        if (isTextType(object.type)) {
+          object.set({ fill: value });
+          return;
+        }
+        object.set({ stroke: value });
+      });
+      canvas.renderAll();
+    },
+    getActiveStrokeColor: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) return strokeColor;
+      const value = selectedObject.get("stroke") || strokeColor;
+      return value as string;
+    },
+    changeStrokeWidth: (value: number) => {
+      setStrokeWidth(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeWidth: value });
+      });
+      canvas.renderAll();
+    },
+    getActiveStrokeWidth: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) return strokeWidth;
+      const value = selectedObject.get("strokeWidth") || strokeWidth;
+      return value as number;
+    },
+    changeStrokeDashArray: (value: number[]) => {
+      setStrokeDashArray(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeDashArray: value });
+      });
+      canvas.renderAll();
+    },
+    getActiveStrokeDashArray: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) return strokeDashArray;
+      const value = selectedObject.get("strokeDashArray") || strokeDashArray;
+      return value as number[];
     },
   };
 };

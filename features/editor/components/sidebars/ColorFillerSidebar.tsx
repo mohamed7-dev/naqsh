@@ -1,11 +1,14 @@
+"use client";
 import React from "react";
-import { useEditorStore } from "../../store/editorStore";
 import { ColorPalette } from "./ColorPalette";
+import { useEditorContext } from "../EditorContext";
 
 function ColorFillerSidebar() {
-  const fillColor = useEditorStore((state) => state.fillColor);
-  const changeFillColor = useEditorStore((state) => state.changeFillColor);
-  return <ColorPalette currentColor={fillColor} onChange={changeFillColor} />;
+  const { editor } = useEditorContext();
+  const fillColor = editor?.getActiveFillColor();
+  const changeFillColor = editor?.changeFillColor;
+
+  return <ColorPalette currentColor={fillColor!} onChange={changeFillColor!} />;
 }
 
 export { ColorFillerSidebar };

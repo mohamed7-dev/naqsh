@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
-import { useEditorStore } from "../store/editorStore";
-import { FabricObject, iMatrix, Point, util } from "fabric";
+import { Canvas, FabricObject, iMatrix, Point, util } from "fabric";
 
-export const useAutoResize = () => {
-  const canvas = useEditorStore((state) => state.canvas);
-  const container = useEditorStore((state) => state.container);
+type UseAutoResizeProps = {
+  canvas: Canvas | null;
+  container: HTMLElement | null;
+};
+export const useAutoResize = (props: UseAutoResizeProps) => {
+  const { canvas, container } = props;
   const autoZoom = React.useCallback(() => {
     if (!canvas || !container) return;
     const width = container.offsetWidth;
@@ -21,8 +23,7 @@ export const useAutoResize = () => {
         (object) => (object as FabricObject & { name: string }).name === "clip"
       );
 
-    // @ts-ignore
-    const scale = util.findScaleToFit(localWorkspace, {
+    const scale = util.findScaleToFit(localWorkspace!, {
       width: width,
       height: height,
     });

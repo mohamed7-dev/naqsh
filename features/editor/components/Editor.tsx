@@ -7,21 +7,23 @@ import { EditorSidebar } from "./EditorSidebar";
 import { EditorNavbar } from "./EditorNavbar";
 import { EditorFooter } from "./EditorFooter";
 import { ToolsSidebars } from "./ToolsSidebars";
-import { useCanvasEvents } from "../hooks/useCanvasEvents";
-import { useAutoResize } from "../hooks/useAutoResize";
-import { useEditorStore } from "../store/editorStore";
+import { Tools } from "../Types";
 import { TOOLBAR_SIDEBAR_ITEMS } from "../data/sidebarItems";
+import { EditorProvider } from "./EditorContext";
 
 function Editor() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const containerRef = React.useRef<HTMLElement>(null);
-  const { init } = useEditor();
+  const [activeTool, setActiveTool] = React.useState<Tools>("Select");
 
-  // listen to canvas events
-  useCanvasEvents();
-  // update the canvas dimensions in relation to the container
-  // when the viewport dimensions changes.
-  useAutoResize();
+  // close sidebar when the active tool is one of the canvas toolbar
+  // and selection is cleared
+  const onSelectionClearedCb = React.useCallback(() => {
+    if (TOOLBAR_SIDEBAR_ITEMS.some((item) => item.id === activeTool)) {
+      setActiveTool("Select");
+    }
+  }, [activeTool]);
+  const { init, editor } = useEditor({ onSelectionClearedCb });
 
   React.useEffect(() => {
     // initialize fabric canvas
@@ -42,30 +44,38 @@ function Editor() {
 
   return (
     <div className="flex flex-col h-full">
-      <nav className="h-16 overflow-x-auto p-2">
-        <EditorNavbar />
-      </nav>
-      <div className="w-full h-[calc(100%-4rem)] absolute top-[4rem] flex">
-        <aside className="w-28" aria-label="editor toolbar">
-          <EditorSidebar />
-        </aside>
-        <ToolsSidebars />
-        <div className="flex-1 flex flex-col relative overflow-auto bg-muted">
-          <aside className={"h-16"} aria-label="canvas toolbar">
-            <CanvasToolbar />
+      <EditorProvider
+        editor={editor}
+        activeTool={activeTool}
+        setActiveTool={setActiveTool}
+      >
+        <nav className="h-16 overflow-x-auto p-2">
+          <EditorNavbar />
+        </nav>
+        <div className="w-full h-[calc(100%-4rem)] absolute top-[4rem] flex">
+          <aside className="w-28" aria-label="editor toolbar">
+            <EditorSidebar />
           </aside>
-          <section
-            aria-label="editor canvas"
-            ref={containerRef}
-            className="h-[calc(100%-8rem)] flex-1"
-          >
-            <canvas ref={canvasRef} />
-          </section>
-          <footer className="h-14">
-            <EditorFooter />
-          </footer>
+          <ToolsSidebars />
+          <div className="flex-1 flex flex-col relative overflow-auto bg-muted">
+            <aside className={"h-16"} aria-label="canvas toolbar">
+              <CanvasToolbar
+                key={JSON.stringify(editor?.canvas.getActiveObject())}
+              />
+            </aside>
+            <section
+              aria-label="editor canvas"
+              ref={containerRef}
+              className="h-[calc(100%-8rem)] flex-1"
+            >
+              <canvas ref={canvasRef} />
+            </section>
+            <footer className="h-14">
+              <EditorFooter />
+            </footer>
+          </div>
         </div>
-      </div>
+      </EditorProvider>
     </div>
   );
 }

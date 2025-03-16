@@ -1,5 +1,8 @@
-interface Editor {
-  addCircle: () => void;
-}
+import { FontsEnum } from "./data/fonts";
+import { EditorToolsEnum } from "./data/tools";
 
-export type { Editor };
+type FontStyle = "normal" | "italic";
+type TextAlign = "right" | "left" | "center";
+type Fonts = keyof typeof FontsEnum;
+type Tools = keyof typeof EditorToolsEnum;
+export type { FontStyle, TextAlign, Fonts, Tools };

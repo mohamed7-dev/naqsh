@@ -2,13 +2,12 @@
 import { TooltipWrapper } from "@/components/overlays/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { useEditorStore } from "../../store/editorStore";
 import { SquareDashed } from "lucide-react";
 import { TOOLBAR_SIDEBAR_ITEMS } from "../../data/sidebarItems";
+import { useEditorContext } from "../EditorContext";
 
 function StrokeWidth() {
-  const activeTool = useEditorStore((state) => state.activeTool);
-  const setActiveTool = useEditorStore((state) => state.setActiveTool);
+  const { activeTool, setActiveTool } = useEditorContext();
   const strokeWidthItem = TOOLBAR_SIDEBAR_ITEMS.find(
     (item) => item.id === "StrokeWidth"
   );

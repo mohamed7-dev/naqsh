@@ -1,22 +1,21 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { useEditorStore } from "../../store/editorStore";
+import { useEditorContext } from "../EditorContext";
+import { STROKE_DASH_ARRAY, STROKE_WIDTH } from "../../config/shape";
 
 function StrokeWidthSidebar() {
   const [borderType, setBorderType] = React.useState<"Solid" | "Dashed">(
     "Solid"
   );
-  const strokeWidth = useEditorStore((state) => state.strokeWidth);
-  const changeStrokeWidth = useEditorStore((state) => state.changeStrokeWidth);
-  const strokeDashArray = useEditorStore((state) => state.strokeDashArray);
-  const changeStrokeDashArray = useEditorStore(
-    (state) => state.changeStrokeDashArray
-  );
+  const { editor } = useEditorContext();
+  const strokeWidth = editor?.getActiveStrokeWidth() || STROKE_WIDTH;
+  const changeStrokeWidth = editor?.changeStrokeWidth;
+  const strokeDashArray = editor?.getActiveStrokeDashArray || STROKE_DASH_ARRAY;
+  const changeStrokeDashArray = editor?.changeStrokeDashArray;
   return (
     <>
       <div className="w-full h-full flex flex-col gap-4 p-2">
@@ -24,14 +23,14 @@ function StrokeWidthSidebar() {
           <Label className="text-sm">Stroke width</Label>
           <Slider
             value={[strokeWidth]}
-            onValueChange={(values) => changeStrokeWidth(values[0])}
+            onValueChange={(values) => changeStrokeWidth?.(values[0])}
           />
         </div>
         <div className="p-4 space-y-4 border-b">
           <Label className="text-sm">Stroke type</Label>
           <Button
             onClick={() => {
-              changeStrokeDashArray([]);
+              changeStrokeDashArray?.([]);
               setBorderType("Solid");
             }}
             variant={borderType === "Solid" ? "secondary" : "outline"}
@@ -45,7 +44,7 @@ function StrokeWidthSidebar() {
           </Button>
           <Button
             onClick={() => {
-              changeStrokeDashArray([5, 5]);
+              changeStrokeDashArray?.([5, 5]);
               setBorderType("Dashed");
             }}
             variant={

@@ -1,4 +1,5 @@
-const FILL_COLOR = "rgba(0,0,0,1)";
+import { FILL_COLOR } from "./common";
+
 const STROKE_COLOR = "rgba(0,0,0,1)";
 const STROKE_WIDTH = 2;
 const STROKE_DASH_ARRAY: number[] | [] = [];

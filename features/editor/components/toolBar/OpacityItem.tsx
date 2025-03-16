@@ -1,13 +1,12 @@
 "use client";
 import { TooltipWrapper } from "@/components/overlays/TooltipWrapper";
-import { useEditorStore } from "../../store/editorStore";
 import { Button } from "@/components/ui/button";
 import { Barcode } from "lucide-react";
 import { TOOLBAR_SIDEBAR_ITEMS } from "../../data/sidebarItems";
+import { useEditorContext } from "../EditorContext";
 
 function OpacityItem() {
-  const setActiveTool = useEditorStore((state) => state.setActiveTool);
-  const activeTool = useEditorStore((state) => state.activeTool);
+  const { activeTool, setActiveTool } = useEditorContext();
   const item = TOOLBAR_SIDEBAR_ITEMS.find((item) => item.id === "Opacity");
   return (
     <>

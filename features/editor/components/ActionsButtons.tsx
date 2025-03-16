@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { MousePointerClick, Redo2, Undo2 } from "lucide-react";
 import React from "react";
-import { useEditorStore } from "../store/editorStore";
 import { cn } from "@/lib/utils";
+import { useEditorContext } from "./EditorContext";
 
 function ActionsButtons() {
-  const activeTool = useEditorStore((state) => state.activeTool);
+  const { activeTool, setActiveTool } = useEditorContext();
   const isActive = activeTool === "Select";
-  const setActiveTool = useEditorStore((state) => state.setActiveTool);
 
   return (
     <>

@@ -2,17 +2,16 @@
 import { TooltipWrapper } from "@/components/overlays/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { useEditorStore } from "../../store/editorStore";
 import { TOOLBAR_SIDEBAR_ITEMS } from "../../data/sidebarItems";
+import { useEditorContext } from "../EditorContext";
 
 type ColorItemProps = {
   variant: "Fill" | "Stroke";
 };
 function ColorItem({ variant }: ColorItemProps) {
-  const setActiveTool = useEditorStore((state) => state.setActiveTool);
-  const activeTool = useEditorStore((state) => state.activeTool);
-  const fillColor = useEditorStore((state) => state.fillColor);
-  const strokeColor = useEditorStore((state) => state.strokeColor);
+  const { editor, activeTool, setActiveTool } = useEditorContext();
+  const fillColor = editor?.getActiveFillColor();
+  const strokeColor = editor?.getActiveStrokeColor();
   const item = TOOLBAR_SIDEBAR_ITEMS.find((item) =>
     variant === "Fill" ? item.id === "Fill" : item.id === "StrokeColor"
   );

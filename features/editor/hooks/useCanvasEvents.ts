@@ -1,51 +1,70 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { useEditorStore } from "../store/editorStore";
 import { TOOLBAR_SIDEBAR_ITEMS } from "../data/sidebarItems";
+import { Canvas, FabricObject } from "fabric";
 
-const useCanvasEvents = () => {
-  const canvas = useEditorStore((state) => state.canvas);
-  const setActiveTool = useEditorStore((state) => state.setActiveTool);
-  const activeTool = useEditorStore((state) => state.activeTool);
-  const selectObjects = useEditorStore((state) => state.selectObjects);
-  const clearObjects = useEditorStore((state) => state.clearObjects);
-  const changeFillColor = useEditorStore((state) => state.changeFillColor);
-  const changeStrokeColor = useEditorStore((state) => state.changeStrokeColor);
+type UseCanvasEventsProps = {
+  canvas: Canvas | null;
+  onSelectionCreated: (objects: FabricObject[]) => void;
+  onSelectionUpdated: (objects: FabricObject[]) => void;
+  onSelectionCleared: () => void;
+};
+const useCanvasEvents = (props: UseCanvasEventsProps) => {
+  const { canvas, onSelectionCleared, onSelectionUpdated, onSelectionCreated } =
+    props;
 
-  const clearSelectionCb = React.useCallback(() => {
-    if (TOOLBAR_SIDEBAR_ITEMS.some((item) => item.id === activeTool)) {
-      setActiveTool("Select");
-    }
-  }, [activeTool]);
+  const onSelectionCreatedCb = React.useCallback(
+    (e: any) => {
+      onSelectionCreated(e.selected);
+    },
+    [onSelectionCreated]
+  );
+
+  const onSelectionUpdatedCb = React.useCallback(
+    (e: any) => {
+      onSelectionUpdated(e.selected);
+      // const topFillColor = e.selected[0].fill;
+      // const topStrokeColor = e.selected[0].stroke;
+      // // gradients, and patterns are not supported
+      // if (typeof topFillColor === "string") {
+      //   changeFillColor(topFillColor);
+      // }
+
+      // if (typeof topStrokeColor === "string") {
+      //   changeStrokeColor(topStrokeColor);
+      // }
+      // selectObjects(e.selected);
+    },
+    [onSelectionUpdated]
+  );
+  const onSelectionClearedCb = React.useCallback(() => {
+    onSelectionCleared();
+  }, [onSelectionCleared]);
 
   React.useEffect(() => {
     if (canvas) {
       //   canvas.on("object:removed", () => save());
       //   canvas.on("object:modified", () => save());
+      // canvas.on("object:added", () => {});
 
-      canvas.on("selection:created", (e) => {
-        selectObjects(e.selected);
-      });
-      canvas.on("selection:updated", (e) => {
-        const topFillColor = e.selected[0].fill;
-        const topStrokeColor = e.selected[0].stroke;
-        // gradients, and patterns are not supported
-        typeof topFillColor === "string" && changeFillColor(topFillColor);
-        typeof topStrokeColor === "string" && changeStrokeColor(topStrokeColor);
-        selectObjects(e.selected);
-      });
-      canvas.on("selection:cleared", () => {
-        clearObjects();
-        // this will deactivate the sidebar
-        clearSelectionCb();
-      });
+      canvas.on("selection:created", onSelectionCreatedCb);
+      canvas.on("selection:updated", onSelectionUpdatedCb);
+      canvas.on("selection:cleared", onSelectionClearedCb);
     }
 
     return () => {
       if (canvas) {
-        canvas.off("selection:cleared");
+        canvas.off("selection:cleared", onSelectionClearedCb);
+        canvas.off("selection:created", onSelectionCreatedCb);
+        canvas.off("selection:updated", onSelectionUpdatedCb);
       }
     };
-  }, [canvas, clearSelectionCb]);
+  }, [
+    canvas,
+    onSelectionClearedCb,
+    onSelectionCreatedCb,
+    onSelectionUpdatedCb,
+  ]);
 };
 
 export { useCanvasEvents };

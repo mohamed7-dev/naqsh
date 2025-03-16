@@ -8,7 +8,8 @@ import {
   Sparkles,
   Type,
 } from "lucide-react";
-import { EditorTools, EditorToolsEnum } from "../store/activeToolSlice";
+import { EditorToolsEnum } from "./tools";
+import { Tools } from "../Types";
 
 type Conditional =
   | {
@@ -22,7 +23,7 @@ type Conditional =
 
 type SidebarItem = {
   title: string;
-  id: EditorTools;
+  id: Tools;
   ICON: LucideIcon;
   sidebarDescription?: string;
 } & Conditional;
@@ -51,7 +52,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
     ICON: Type,
     hasSidebar: true,
     sidebarTitle: "Text",
-    sidebarDescription: "",
+    sidebarDescription: "Add text to your canvas",
   },
   {
     title: "Shapes",
@@ -115,6 +116,13 @@ const TOOLBAR_SIDEBAR_ITEMS: Omit<SidebarItem, "ICON">[] = [
     hasSidebar: true,
     sidebarTitle: "Opacity",
     sidebarDescription: "Change the shape's opacity",
+  },
+  {
+    title: "Font Family",
+    id: EditorToolsEnum.Font,
+    hasSidebar: true,
+    sidebarTitle: "Font Family",
+    sidebarDescription: "Change the font family",
   },
 ];
 
