@@ -3,7 +3,6 @@ import { FILL_COLOR } from "./common";
 const STROKE_COLOR = "rgba(0,0,0,1)";
 const STROKE_WIDTH = 2;
 const STROKE_DASH_ARRAY: number[] | [] = [];
-const OPACITY = 1;
 
 const CIRCLE_OPTIONS = {
   radius: 225,
@@ -56,5 +55,4 @@ export {
   STROKE_COLOR,
   STROKE_WIDTH,
   STROKE_DASH_ARRAY,
-  OPACITY,
 };

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { TOOLBAR_SIDEBAR_ITEMS } from "../data/sidebarItems";
 import { Canvas, FabricObject } from "fabric";
 
 type UseCanvasEventsProps = {
@@ -8,10 +7,16 @@ type UseCanvasEventsProps = {
   onSelectionCreated: (objects: FabricObject[]) => void;
   onSelectionUpdated: (objects: FabricObject[]) => void;
   onSelectionCleared: () => void;
+  save: (trackChangesInHistory?: boolean) => void;
 };
 const useCanvasEvents = (props: UseCanvasEventsProps) => {
-  const { canvas, onSelectionCleared, onSelectionUpdated, onSelectionCreated } =
-    props;
+  const {
+    canvas,
+    onSelectionCleared,
+    onSelectionUpdated,
+    onSelectionCreated,
+    save,
+  } = props;
 
   const onSelectionCreatedCb = React.useCallback(
     (e: any) => {
@@ -23,17 +28,6 @@ const useCanvasEvents = (props: UseCanvasEventsProps) => {
   const onSelectionUpdatedCb = React.useCallback(
     (e: any) => {
       onSelectionUpdated(e.selected);
-      // const topFillColor = e.selected[0].fill;
-      // const topStrokeColor = e.selected[0].stroke;
-      // // gradients, and patterns are not supported
-      // if (typeof topFillColor === "string") {
-      //   changeFillColor(topFillColor);
-      // }
-
-      // if (typeof topStrokeColor === "string") {
-      //   changeStrokeColor(topStrokeColor);
-      // }
-      // selectObjects(e.selected);
     },
     [onSelectionUpdated]
   );
@@ -41,12 +35,20 @@ const useCanvasEvents = (props: UseCanvasEventsProps) => {
     onSelectionCleared();
   }, [onSelectionCleared]);
 
+  const onObjectAddedCb = React.useCallback(() => {
+    save();
+  }, [save]);
+  const onObjectRemovedCb = React.useCallback(() => {
+    save();
+  }, [save]);
+  const onObjectModifiedCb = React.useCallback(() => {
+    save();
+  }, [save]);
   React.useEffect(() => {
     if (canvas) {
-      //   canvas.on("object:removed", () => save());
-      //   canvas.on("object:modified", () => save());
-      // canvas.on("object:added", () => {});
-
+      canvas.on("object:removed", onObjectRemovedCb);
+      canvas.on("object:modified", onObjectModifiedCb);
+      canvas.on("object:added", onObjectAddedCb);
       canvas.on("selection:created", onSelectionCreatedCb);
       canvas.on("selection:updated", onSelectionUpdatedCb);
       canvas.on("selection:cleared", onSelectionClearedCb);
@@ -54,6 +56,9 @@ const useCanvasEvents = (props: UseCanvasEventsProps) => {
 
     return () => {
       if (canvas) {
+        canvas.off("object:removed", onObjectRemovedCb);
+        canvas.off("object:modified", onObjectModifiedCb);
+        canvas.off("object:added", onObjectAddedCb);
         canvas.off("selection:cleared", onSelectionClearedCb);
         canvas.off("selection:created", onSelectionCreatedCb);
         canvas.off("selection:updated", onSelectionUpdatedCb);
@@ -64,6 +69,9 @@ const useCanvasEvents = (props: UseCanvasEventsProps) => {
     onSelectionClearedCb,
     onSelectionCreatedCb,
     onSelectionUpdatedCb,
+    onObjectAddedCb,
+    onObjectModifiedCb,
+    onObjectRemovedCb,
   ]);
 };
 

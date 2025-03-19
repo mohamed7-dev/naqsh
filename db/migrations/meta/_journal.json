@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1742302097776,
+      "tag": "0000_glossy_lockjaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742312744088,
+      "tag": "0001_messy_venom",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742328380206,
+      "tag": "0002_simple_gateway",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742332801493,
+      "tag": "0003_nasty_ender_wiggin",
+      "breakpoints": true
+    }
+  ]
+}

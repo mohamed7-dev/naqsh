@@ -7,13 +7,6 @@ import {
 } from "../config/shape";
 import { addToCanvas, isTextType } from "./utils";
 
-type ShapeProps = {
-  fillColor?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
-  strokeDashArray?: number[] | [];
-};
-
 type ShapeFactoryProps = {
   canvas: Canvas;
   selectedObjects: FabricObject[];
@@ -130,6 +123,9 @@ const shapeFactory = (props: ShapeFactoryProps) => {
         }
         object.set({ stroke: value });
       });
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.color = strokeColor;
+      }
       canvas.renderAll();
     },
     getActiveStrokeColor: () => {
@@ -143,6 +139,9 @@ const shapeFactory = (props: ShapeFactoryProps) => {
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: value });
       });
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.width = strokeWidth;
+      }
       canvas.renderAll();
     },
     getActiveStrokeWidth: () => {

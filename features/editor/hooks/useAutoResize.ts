@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Canvas, FabricObject, iMatrix, Point, util } from "fabric";
+import { Canvas, FabricObject, iMatrix, Point, Rect, util } from "fabric";
 
 type UseAutoResizeProps = {
   canvas: Canvas | null;
@@ -22,8 +22,8 @@ export const useAutoResize = (props: UseAutoResizeProps) => {
       .find(
         (object) => (object as FabricObject & { name: string }).name === "clip"
       );
-
-    const scale = util.findScaleToFit(localWorkspace!, {
+    if (!localWorkspace) return;
+    const scale = util.findScaleToFit(localWorkspace, {
       width: width,
       height: height,
     });
@@ -54,10 +54,10 @@ export const useAutoResize = (props: UseAutoResizeProps) => {
 
     canvas.setViewportTransform(viewportTransform);
 
-    // localWorkspace?.clone((cloned: Rect) => {
-    //   canvas.clipPath = cloned;
-    //   canvas.requestRenderAll();
-    // });
+    localWorkspace?.clone().then((cloned) => {
+      canvas.clipPath = cloned;
+      canvas.requestRenderAll();
+    });
   }, [canvas, container]);
 
   React.useEffect(() => {

@@ -8,11 +8,20 @@ import { useEditorContext } from "./EditorContext";
 type EditorSidebarItemProps = SidebarItem;
 function EditorSidebarItem(props: EditorSidebarItemProps) {
   const { ICON, title, id } = props;
-  const { activeTool, setActiveTool } = useEditorContext();
+  const { activeTool, setActiveTool, editor } = useEditorContext();
   const isActive = activeTool === id;
+
   const handleClick = () => {
-    if (activeTool === id) setActiveTool("Select");
-    else setActiveTool(id);
+    if (id === "Draw") {
+      editor?.enableDrawingMode();
+    }
+
+    if (activeTool === "Draw") {
+      editor?.disableDrawingMode();
+    }
+
+    if (activeTool === id) return setActiveTool("Select");
+    setActiveTool(id);
   };
   return (
     <li className="w-full">

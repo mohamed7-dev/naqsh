@@ -7,9 +7,11 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Download, File } from "lucide-react";
+import { Download, ImageDown } from "lucide-react";
+import { useEditorContext } from "./EditorContext";
 
 function ExportDropdown() {
+  const { editor } = useEditorContext();
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -18,12 +20,12 @@ function ExportDropdown() {
           <Download className="size-4 ml-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-60">
+      <DropdownMenuContent align="end" className="min-w-60 space-y-2">
         <DropdownMenuItem
-          className="flex items-center gap-x-2"
-          onClick={() => console.log("save JSON")}
+          className="flex items-center gap-x-2 [&>svg]:size-6 "
+          onClick={() => editor?.saveJSON?.()}
         >
-          <File className="size-8" />
+          <ImageDown />
           <div>
             <p>JSON</p>
             <p className="text-xs text-muted-foreground">
@@ -32,10 +34,10 @@ function ExportDropdown() {
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="flex items-center gap-x-2"
-          onClick={() => console.log("save png")}
+          className="flex items-center gap-x-2 [&>svg]:size-6"
+          onClick={() => editor?.savePNG?.()}
         >
-          <File className="size-8" />
+          <ImageDown />
           <div>
             <p>PNG</p>
             <p className="text-xs text-muted-foreground">
@@ -44,20 +46,20 @@ function ExportDropdown() {
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="flex items-center gap-x-2"
-          onClick={() => console.log("save jpg")}
+          className="flex items-center gap-x-2 [&>svg]:size-6"
+          onClick={() => editor?.saveJPG?.()}
         >
-          <File className="size-8" />
+          <ImageDown />
           <div>
             <p>JPG</p>
             <p className="text-xs text-muted-foreground">Best for printing</p>
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="flex items-center gap-x-2"
-          onClick={() => console.log("save SVG")}
+          className="flex items-center gap-x-2 [&>svg]:size-6"
+          onClick={() => editor?.saveSVG?.()}
         >
-          <File className="size-8" />
+          <ImageDown />
           <div>
             <p>SVG</p>
             <p className="text-xs text-muted-foreground">

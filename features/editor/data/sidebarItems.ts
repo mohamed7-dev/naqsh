@@ -44,7 +44,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
     ICON: Image,
     hasSidebar: true,
     sidebarTitle: "Images",
-    sidebarDescription: "",
+    sidebarDescription: "Drag and drop the image you prefer",
   },
   {
     title: "Text",
@@ -68,7 +68,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
     ICON: Pencil,
     hasSidebar: true,
     sidebarTitle: "Draw",
-    sidebarDescription: "",
+    sidebarDescription: "Customize your brush",
   },
   {
     title: "AI",
@@ -84,7 +84,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
     ICON: Settings,
     hasSidebar: true,
     sidebarTitle: "Settings",
-    sidebarDescription: "",
+    sidebarDescription: "Feel free to customize your workspace",
   },
 ];
 
@@ -123,6 +123,13 @@ const TOOLBAR_SIDEBAR_ITEMS: Omit<SidebarItem, "ICON">[] = [
     hasSidebar: true,
     sidebarTitle: "Font Family",
     sidebarDescription: "Change the font family",
+  },
+  {
+    title: "Image Filters",
+    id: EditorToolsEnum.Filter,
+    hasSidebar: true,
+    sidebarTitle: "Image Filters",
+    sidebarDescription: "Apply some filters on the image",
   },
 ];
 

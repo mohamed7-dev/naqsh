@@ -13,9 +13,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { TextSidebar } from "./sidebars/TextSidebar";
 import { FontSidebar } from "./sidebars/FontSidebar";
 import { useEditorContext } from "./EditorContext";
+import { ImagesSidebar } from "@/features/images/components/ImagesSidebar";
+import { FiltersSidebar } from "@/features/images/components/FiltersSidebar";
+import { AISidebar } from "@/features/ai/components/AISidebar";
+import { DrawSidebar } from "./sidebars/DrawSidebar";
+import { SettingsSidebar } from "./sidebars/SettingsSidebar";
 
 function ToolsSidebars() {
-  const { activeTool, setActiveTool } = useEditorContext();
+  const { activeTool, setActiveTool, editor } = useEditorContext();
   const item = React.useMemo(() => {
     const sidebarItems = SIDEBAR_ITEMS.filter(
       (item) => item.hasSidebar === true
@@ -30,6 +35,8 @@ function ToolsSidebars() {
   }, [activeTool]);
 
   const onClose = () => {
+    // if drawing mode is enabled, disable it
+    editor?.disableDrawingMode();
     setActiveTool("Select");
   };
   return (
@@ -43,7 +50,7 @@ function ToolsSidebars() {
         title={item?.sidebarTitle || ""}
         description={item?.sidebarDescription}
       />
-      <ScrollArea className="p-2 h-[70vh]">
+      <ScrollArea className="p-2 h-[80vh]">
         {activeTool === "Shapes" && <ShapesSidebar />}
         {activeTool === "Fill" && <ColorFillerSidebar />}
         {activeTool === "StrokeColor" && <StrokeColorSidebar />}
@@ -51,6 +58,11 @@ function ToolsSidebars() {
         {activeTool === "Opacity" && <OpacitySidebar />}
         {activeTool === "Text" && <TextSidebar />}
         {activeTool === "Font" && <FontSidebar />}
+        {activeTool === "Images" && <ImagesSidebar />}
+        {activeTool === "Filter" && <FiltersSidebar />}
+        {activeTool === "AI" && <AISidebar />}
+        {activeTool === "Draw" && <DrawSidebar />}
+        {activeTool === "Settings" && <SettingsSidebar />}
       </ScrollArea>
       <ToolSidebarClose onClose={onClose} />
     </aside>

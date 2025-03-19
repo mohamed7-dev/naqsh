@@ -1,3 +1,19 @@
 const FILL_COLOR = "rgba(0,0,0,1)";
+const OPACITY = 1;
+const WORKSPACE_BG = "#fff";
+const WORKSPACE_WIDTH = 1280;
+const WORKSPACE_HEIGHT = 720;
+const ZOOM_RATIO = 0.05;
+const MAX_ZOOM_IN = 1;
+const MIN_ZOOM_OUT = 0.4;
 
-export { FILL_COLOR };
+export {
+  FILL_COLOR,
+  OPACITY,
+  WORKSPACE_BG,
+  WORKSPACE_HEIGHT,
+  WORKSPACE_WIDTH,
+  ZOOM_RATIO,
+  MAX_ZOOM_IN,
+  MIN_ZOOM_OUT,
+};

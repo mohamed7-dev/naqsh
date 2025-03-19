@@ -1,8 +1,8 @@
-import { routes } from "@/lib/routes";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import LogoSVG from "@/public/logo.svg";
+import { routes } from "@/config/routes";
 
 function Logo() {
   return (

@@ -1,4 +1,10 @@
-import { Canvas, FabricObject, Textbox, TextboxProps } from "fabric";
+import {
+  Canvas,
+  FabricObject,
+  PencilBrush,
+  Textbox,
+  TextboxProps,
+} from "fabric";
 import { addToCanvas, isTextType } from "./utils";
 import { FONT_SIZE, FONT_WEIGHT, TEXT_OPTIONS } from "../config/text";
 import { Fonts, FontStyle, TextAlign } from "../Types";
@@ -14,10 +20,19 @@ type TextFactoryProps = {
   fontFamily: Fonts;
   setFontFamily: (font: Fonts) => void;
   fillColor: string;
+  strokeWidth: number;
+  strokeColor: string;
 };
 const textFactory = (props: TextFactoryProps) => {
-  const { canvas, selectedObjects, fontFamily, setFontFamily, fillColor } =
-    props;
+  const {
+    canvas,
+    selectedObjects,
+    fontFamily,
+    setFontFamily,
+    fillColor,
+    strokeColor,
+    strokeWidth,
+  } = props;
   return {
     addText: ({ defaultText = "Hello", options }: TextProps) => {
       const text = new Textbox(defaultText, {
@@ -136,6 +151,19 @@ const textFactory = (props: TextFactoryProps) => {
       if (!selectedObject) return fontFamily;
       const value = selectedObject.get("fontFamily") || fontFamily;
       return value as Fonts;
+    },
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.freeDrawingBrush = new PencilBrush(canvas);
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.width = strokeWidth;
+        canvas.freeDrawingBrush.color = strokeColor;
+      }
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
     },
   };
 };

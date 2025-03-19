@@ -1,19 +1,19 @@
 "use client";
 import React from "react";
-import { ColorItem } from "./toolBar/ColorItem";
-import { StrokeWidth } from "./toolBar/StrokeWidth";
-import { LayeringItems } from "./toolBar/LayeringItems";
-import { OpacityItem } from "./toolBar/OpacityItem";
 import { isTextType } from "../lib/utils";
-import { FontItem } from "./toolBar/FontItem";
-import { TextItems } from "./toolBar/TextItems";
 import { useEditorContext } from "./EditorContext";
+import { ShapeTools } from "./toolBar/ShapeTools";
+import { TextTools } from "./toolBar/TextTools";
+import { CommonTools } from "./toolBar/CommonTools";
+import { ColorTool } from "./toolBar/ColorTool";
+import { ImagesTools } from "@/features/images/components/ImagesTools";
 
 function CanvasToolbar() {
   const { editor } = useEditorContext();
   const selectedObjects = editor?.selectedObjects;
 
   const isText = isTextType(selectedObjects?.[0]?.type);
+  const isImage = selectedObjects?.[0]?.type === "image";
 
   return (
     <div
@@ -23,13 +23,11 @@ function CanvasToolbar() {
     >
       {!!selectedObjects?.length && (
         <>
-          <ColorItem variant="Fill" />
-          {!isText && <ColorItem variant="Stroke" />}
-          {!isText && <StrokeWidth />}
-          {isText && <FontItem />}
-          {isText && <TextItems />}
-          <LayeringItems />
-          <OpacityItem />
+          <ColorTool variant="Fill" />
+          {!isText && <ShapeTools />}
+          {isText && <TextTools />}
+          {isImage && <ImagesTools />}
+          <CommonTools />
         </>
       )}
     </div>

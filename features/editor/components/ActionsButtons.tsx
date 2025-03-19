@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useEditorContext } from "./EditorContext";
 
 function ActionsButtons() {
-  const { activeTool, setActiveTool } = useEditorContext();
+  const { activeTool, setActiveTool, editor } = useEditorContext();
   const isActive = activeTool === "Select";
 
   return (
@@ -26,24 +26,26 @@ function ActionsButtons() {
 
       <TooltipWrapper label="Undo" side="bottom" sideOffset={10}>
         <Button
-          //   disabled={!editor?.canUndo()}
+          disabled={!editor?.canUndo()}
           variant="ghost"
           size="icon"
-          //   onClick={() => editor?.onUndo()}
+          onClick={() => editor?.undo()}
           className="shrink-0"
         >
-          <Undo2 className="size-4" />
+          <Undo2 />
+          <span className="sr-only">undo action</span>
         </Button>
       </TooltipWrapper>
       <TooltipWrapper label="Redo" side="bottom" sideOffset={10}>
         <Button
-          //   disabled={!editor?.canRedo()}
+          disabled={!editor?.canRedo()}
           variant="ghost"
           size="icon"
-          //   onClick={() => editor?.onRedo()}
+          onClick={() => editor?.redo()}
           className="shrink-0"
         >
-          <Redo2 className="size-4" />
+          <Redo2 />
+          <span className="sr-only">redo action</span>
         </Button>
       </TooltipWrapper>
     </>

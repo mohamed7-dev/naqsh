@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-const APP_NAME = "NeoCanva";
+const APP_NAME = "Naqsh";
 
 const COMMON_METADATA: Metadata = {
   applicationName: APP_NAME,
