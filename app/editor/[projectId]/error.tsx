@@ -16,7 +16,7 @@ const ProjectError = ({
 }) => {
   React.useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error.message);
+    console.error(error);
   }, [error]);
   return (
     <main className="h-screen w-full flex flex-col gap-y-5 items-center justify-center">

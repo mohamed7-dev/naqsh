@@ -2,20 +2,15 @@ import React from "react";
 import { Editor } from "@/features/editor/components/Editor";
 import { fetchProjectById } from "@/features/projects/fetchers/fetchProjectById.fetcher";
 import { notFound } from "next/navigation";
-import { unstable_cache } from "next/cache";
 
 type ProjectEditorProps = {
   params: {
     projectId: string;
   };
 };
-const fetchProject = unstable_cache(
-  async (id: string) => {
-    return await fetchProjectById(id);
-  },
-  ["project"],
-  { revalidate: false, tags: ["project"] }
-);
+const fetchProject = React.cache(async (id: string) => {
+  return await fetchProjectById(id);
+});
 
 export async function generateMetadata({
   params,
