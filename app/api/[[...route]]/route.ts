@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-export const runtime = "nodejs";
 import images from "./images";
 import ai from "./ai";
 import users from "./users";
 import projects from "./projects";
+
+export const runtime = "nodejs";
+
 const app = new Hono().basePath("/api");
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
