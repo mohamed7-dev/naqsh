@@ -132,7 +132,7 @@ const shapeFactory = (props: ShapeFactoryProps) => {
       if (canvas.freeDrawingBrush) {
         canvas.freeDrawingBrush.color = strokeColor;
       }
-      canvas.renderAll();
+      // canvas.renderAll();
     },
     getActiveStrokeColor: () => {
       const selectedObject = selectedObjects[0];

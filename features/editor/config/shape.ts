@@ -1,6 +1,6 @@
 import { FILL_COLOR } from "./common";
 
-const STROKE_COLOR = "yellow";
+const STROKE_COLOR = "#e91e63";
 const STROKE_WIDTH = 4;
 const STROKE_DASH_ARRAY: number[] | [] = [];
 

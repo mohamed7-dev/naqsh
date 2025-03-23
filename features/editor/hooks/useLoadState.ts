@@ -15,9 +15,10 @@ const useLoadState = ({
   initialState,
 }: UseLoadStateProps) => {
   const { theme } = useTheme();
+  const initialized = React.useRef(false);
   React.useEffect(() => {
     if (!canvas) return;
-    if (initialState.current) {
+    if (!initialized.current && initialState.current) {
       canvas.loadFromJSON(initialState.current!).then((canvas) => {
         if (!canvas.get("background")) {
           if (theme === "light") {
@@ -26,8 +27,9 @@ const useLoadState = ({
             return canvas.set({ backgroundColor: DEFAULT_DARK_BG });
           }
         }
-        canvas.renderAll();
+        // canvas.renderAll();
         autoZoom();
+        initialized.current = true;
       });
     }
   }, [canvas, autoZoom, initialState, theme]);

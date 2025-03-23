@@ -15,9 +15,9 @@ function Providers({ children, session, theme }: ProvidersProps) {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="dark"
       disableTransitionOnChange
+      enableColorScheme={true}
       {...theme}
     >
       <SessionProvider session={session}>

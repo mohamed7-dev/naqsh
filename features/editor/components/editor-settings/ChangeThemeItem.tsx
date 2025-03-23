@@ -14,10 +14,11 @@ const ChangeThemeItem = React.memo(function ChangeThemeItem({
   editor,
 }: ChangeThemeItemProps) {
   const { setTheme, theme } = useTheme();
+  const changeWorkspaceBackground = editor?.changeWorkspaceBackground;
   const handleThemeChange = React.useCallback(
     (val: string) => {
       setTheme(val);
-      editor?.changeWorkspaceBackground?.(
+      changeWorkspaceBackground?.(
         val === "light"
           ? DEFAULT_LIGHT_BG
           : val === "dark"
@@ -25,7 +26,7 @@ const ChangeThemeItem = React.memo(function ChangeThemeItem({
           : "#fff"
       );
     },
-    [editor, setTheme]
+    [changeWorkspaceBackground, setTheme]
   );
   return (
     <DropdownMenuItem className="flex items-center justify-between [&>svg]:size-6 focus:bg-transparent">

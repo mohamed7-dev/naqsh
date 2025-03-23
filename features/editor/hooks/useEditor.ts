@@ -34,6 +34,13 @@ const useEditor = (props: UseEditorProps) => {
   );
   const [fontFamily, setFontFamily] = React.useState<Fonts>(FONT_FAMILY);
   const [fillColor, setFillColor] = React.useState(FILL_COLOR);
+  // const initBg = (JSON.parse(initialState.current!) as { background: string })
+  //   .background;
+  // const isDarkBg = CANVAS_DARK_BG.includes(initBg as string);
+  // const isLightBg = CANVAS_LIGHT_BG.includes(initBg as string);
+  // const [strokeColor, setStrokeColor] = React.useState(
+  //   isLightBg ? DEFAULT_DARK_BG : isDarkBg ? DEFAULT_LIGHT_BG : STROKE_COLOR
+  // );
   const [strokeColor, setStrokeColor] = React.useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = React.useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
