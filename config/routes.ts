@@ -1,5 +1,9 @@
+const appBaseURL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : process.env.NEXT_PUBLIC_DEV_SERVER_URL;
+
 const commonRoutes = {
-  loginRedirectTo: "/",
+  loginRedirectTo: `${appBaseURL}/`,
   authPrefix: "/auth",
   logoutRedirectTo: "/",
 };
