@@ -1,6 +1,6 @@
-const appBaseURL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : process.env.NEXT_PUBLIC_DEV_SERVER_URL;
+const appBaseURL = process.env.NEXT_PUBLIC_APP_URL
+  ? `https://${process.env.NEXT_PUBLIC_APP_URL}`
+  : "http://localhost:3000";
 
 const commonRoutes = {
   loginRedirectTo: `${appBaseURL}/`,
