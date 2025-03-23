@@ -24,7 +24,7 @@ export async function generateMetadata({
 }) {
   const project = await fetchProject(params.projectId);
   if ("error" in project) {
-    if (project.code === 404) throw notFound();
+    if (project.code === 404) return notFound();
     else throw project;
   }
   return {
@@ -36,7 +36,7 @@ async function ProjectEditor(props: ProjectEditorProps) {
   const { params } = props;
   const project = await fetchProject(params.projectId);
   if ("error" in project) {
-    if (project.code === 404) throw notFound();
+    if (project.code === 404) return notFound();
     else throw project;
   }
   return (
