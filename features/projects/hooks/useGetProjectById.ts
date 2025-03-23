@@ -2,7 +2,6 @@ import { honoClient } from "@/lib/hono";
 import { queryKeys } from "@/lib/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
-import { Project } from "../Types";
 
 export type ResponseType = InferResponseType<
   (typeof honoClient.api.projects)[":id"]["$get"]
@@ -11,7 +10,7 @@ export type RequestType = InferRequestType<
   (typeof honoClient.api.projects)[":id"]["$get"]
 >["param"];
 
-const useGetProjectById = (id: string, initialData: Project) => {
+const useGetProjectById = (id: string, initialData: ResponseType) => {
   return useQuery({
     queryKey: queryKeys.getProject(id),
     queryFn: async () => {
@@ -22,7 +21,7 @@ const useGetProjectById = (id: string, initialData: Project) => {
       });
       const data = await response.json();
       if ("error" in data) throw data;
-      return data.data as Project;
+      return data;
     },
     initialData: () => initialData,
     enabled: !!id,

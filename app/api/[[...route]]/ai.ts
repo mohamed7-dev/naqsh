@@ -24,6 +24,7 @@ const app = new Hono().post(
       const model = genAI.getGenerativeModel({
         model: "gemini-2.0-flash-exp",
         generationConfig: {
+          //@ts-expect-error ts lint is not detecting the prop which does exist in the doc
           responseModalities: ["Text", "Image"],
           candidateCount: 1,
         },
@@ -53,7 +54,8 @@ const app = new Hono().post(
       );
     } catch (error) {
       const errorObj = handleError(error);
-      return ctx.json(handleError(error), errorObj.code);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return ctx.json(handleError(error), errorObj.code as any);
     }
   }
 );

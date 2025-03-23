@@ -9,10 +9,6 @@ const getWorkspace = (canvas: Canvas) => {
     );
 };
 
-const scrollToContent = (canvas: Canvas) => {
-  canvas.getObjects().forEach();
-};
-
 const centeralizeObject = (canvas: Canvas, object: FabricObject) => {
   // const workspace = getWorkspace(canvas);
   // const center = canvas?.getCenterPoint();
@@ -62,13 +58,13 @@ const downloadFile = ({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const transformText = (objects: any) => {
   if (!objects) return;
-  objects.forEach((item) => {
-    if (item.objects) {
-      transformText(item.objects);
-    } else {
-      item.type === "text" && item.type === "textbox";
+  objects.forEach(
+    (item: { objects: FabricObject[]; type: "text" | "textbox" }) => {
+      if (item.objects) {
+        transformText(item.objects);
+      }
     }
-  });
+  );
 };
 
 export {

@@ -17,11 +17,13 @@ import { UndoRedo } from "./editor-settings/UndoRedo";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { useConfirm } from "@/hooks/useConfirm";
-import { useGetProjectById } from "@/features/projects/hooks/useGetProjectById";
-import { Project } from "@/features/projects/Types";
+import {
+  ResponseType,
+  useGetProjectById,
+} from "@/features/projects/hooks/useGetProjectById";
 
 type EditorProps = {
-  initialData: Project;
+  initialData: ResponseType;
 };
 function Editor(props: EditorProps) {
   const { initialData } = props;
@@ -30,7 +32,8 @@ function Editor(props: EditorProps) {
   const [activeTool, setActiveTool] = React.useState<ToolsType>("Select");
   const router = useRouter();
   const params = useParams<{ projectId: string }>();
-  const { data: project } = useGetProjectById(params.projectId, initialData);
+  const { data } = useGetProjectById(params.projectId, initialData);
+  const project = data.data;
   const [ConfirmDialog, enterClippingMode] = useConfirm(
     "Are you sure?",
     "Entering clipping mode will enclose your current work in a box?"

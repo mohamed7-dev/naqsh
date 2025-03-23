@@ -3,7 +3,13 @@ import { AuthCard } from "@/features/auth/components/AuthCard";
 import { SignupFooter } from "@/features/auth/components/SignupFooter";
 import { SignupForm } from "@/features/auth/components/SignupForm";
 import { SocialAuthButtons } from "@/features/auth/components/SocialAuthButtons";
+import { APP_NAME } from "@/config/app";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: `Signup to ${APP_NAME}`,
+  description: "signup to start you innovation journey",
+};
 function Signup() {
   return (
     <AuthCard

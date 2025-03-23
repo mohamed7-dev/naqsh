@@ -56,13 +56,6 @@ class HttpException extends AppError {
     return new HttpException(503, message);
   }
 }
-class ValidationException extends AppError {
-  constructor(cause: any) {
-    super("Bad request, Invalid data!", 400);
-    this.cause = cause;
-    this.name = this.constructor.name;
-  }
-}
 
 function logErrorToService(error: unknown) {
   // Replace this with an actual logging service integration
@@ -87,7 +80,7 @@ const handleError = (err: unknown, inputs?: unknown) => {
   // Log the error to an external service or internal logging system
   logErrorToService(err);
   const defaultInputs = inputs ? inputs : null;
-  if (err instanceof ValidationException || err instanceof HttpException) {
+  if (err instanceof HttpException) {
     return {
       error: true,
       name: err.name,
@@ -107,4 +100,4 @@ const handleError = (err: unknown, inputs?: unknown) => {
   }
 };
 
-export { handleError, HttpException, ValidationException };
+export { handleError, HttpException };

@@ -11,8 +11,6 @@ const duplicateProject = async (projectId: string, userId: string) => {
   const duplicatedProject = await insertProject({
     name: `${project.name}-(copy)`,
     json: project.json,
-    width: project.width,
-    height: project.height,
     creator: project.creator.id,
     createdAt: new Date(),
     updatedAt: new Date(),

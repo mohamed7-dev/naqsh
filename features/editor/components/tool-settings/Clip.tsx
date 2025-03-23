@@ -20,7 +20,7 @@ function Clip({ editor }: ClipProps) {
   });
   const changeClipSize = editor?.changeClipSize;
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     changeClipSize?.(size);
   };

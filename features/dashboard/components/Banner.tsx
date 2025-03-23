@@ -3,11 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import React from "react";
 import { BANNER_DESC, BANNER_HEADER } from "../data/messages";
 import { useCreateProject } from "@/features/projects/hooks/useCreateProject";
-import {
-  DEFAULT_PROJECT_NAME,
-  WORKSPACE_HEIGHT,
-  WORKSPACE_WIDTH,
-} from "@/features/editor/config/common";
+import { DEFAULT_PROJECT_NAME } from "@/features/editor/config/common";
 import { LoadingButton } from "@/components/LoadingButton";
 import { toast } from "sonner";
 import { ErrorResponse } from "@/types/Utils";
@@ -33,8 +29,6 @@ function Banner() {
   });
   const handleCreatingProject = async () => {
     await createProject({
-      width: WORKSPACE_WIDTH,
-      height: WORKSPACE_HEIGHT,
       name: DEFAULT_PROJECT_NAME,
       json: "",
     });

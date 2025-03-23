@@ -23,7 +23,8 @@ const users = new Hono().post(
       );
     } catch (error) {
       const errorObj = handleError(error);
-      return ctx.json(errorObj, errorObj.code);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return ctx.json(errorObj, errorObj.code as any);
     }
   }
 );

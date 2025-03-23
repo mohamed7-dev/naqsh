@@ -14,12 +14,11 @@ import {
   Underline,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEditorContext } from "../EditorContext";
-import { TextAlign } from "../../Types";
+import { EditorItemProps, TextAlign } from "../../Types";
 import { Input } from "@/components/ui/input";
 
-function TextTools() {
-  const { editor, activeTool, setActiveTool } = useEditorContext();
+type TextToolsProps = EditorItemProps;
+function TextTools({ editor, activeTool, changeActiveTool }: TextToolsProps) {
   const selectedObjects = editor?.selectedObjects;
 
   // Font Family
@@ -105,7 +104,7 @@ function TextTools() {
     <>
       <TooltipWrapper label="Font" side="bottom" sideOffset={5}>
         <Button
-          onClick={() => setActiveTool("Font")}
+          onClick={() => changeActiveTool("Font")}
           variant={activeTool === "Opacity" ? "secondary" : "ghost"}
           className="w-fit"
         >

@@ -35,7 +35,8 @@ const app = new Hono().get("/", async (ctx) => {
     );
   } catch (error) {
     const errorObj = handleError(error);
-    return ctx.json(errorObj, errorObj.code);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return ctx.json(errorObj, errorObj.code as any);
   }
 });
 

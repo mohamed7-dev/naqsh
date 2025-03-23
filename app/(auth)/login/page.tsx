@@ -1,9 +1,15 @@
+import { APP_NAME } from "@/config/app";
 import { AuthCard } from "@/features/auth/components/AuthCard";
 import { LoginFooter } from "@/features/auth/components/LoginFooter";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { SocialAuthButtons } from "@/features/auth/components/SocialAuthButtons";
+import { Metadata } from "next";
 import React from "react";
 
+export const metadata: Metadata = {
+  title: `Login to ${APP_NAME}`,
+  description: "login to start you innovation journey",
+};
 function Login() {
   return (
     <AuthCard
