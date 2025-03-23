@@ -8,6 +8,7 @@ import {
 import { addToCanvas, isTextType } from "./utils";
 import { FONT_SIZE, FONT_WEIGHT, TEXT_OPTIONS } from "../config/text";
 import { Fonts, FontStyle, TextAlign } from "../Types";
+import { TEXT_FILL_COLOR } from "../config/common";
 
 type TextProps = {
   defaultText?: string;
@@ -37,7 +38,7 @@ const textFactory = (props: TextFactoryProps) => {
     addText: ({ defaultText = "Hello", options }: TextProps) => {
       const text = new Textbox(defaultText, {
         ...TEXT_OPTIONS,
-        fill: fillColor,
+        fill: fillColor || TEXT_FILL_COLOR,
         ...options,
       });
       addToCanvas(canvas, text);

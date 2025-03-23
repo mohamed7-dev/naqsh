@@ -1,4 +1,5 @@
 const FILL_COLOR = "";
+const TEXT_FILL_COLOR = "#e91e63";
 const OPACITY = 1;
 const WORKSPACE_BG = "#fff";
 const WORKSPACE_WIDTH = 1280;
@@ -31,4 +32,5 @@ export {
   DEFAULT_PROJECT_NAME,
   DEFAULT_DARK_BG,
   DEFAULT_LIGHT_BG,
+  TEXT_FILL_COLOR,
 };
