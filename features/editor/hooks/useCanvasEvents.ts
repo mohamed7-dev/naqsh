@@ -44,6 +44,7 @@ const useCanvasEvents = (props: UseCanvasEventsProps) => {
   const onObjectModifiedCb = React.useCallback(() => {
     save();
   }, [save]);
+
   React.useEffect(() => {
     if (canvas) {
       canvas.on("object:removed", onObjectRemovedCb);

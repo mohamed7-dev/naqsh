@@ -14,7 +14,7 @@ const updateProject = async (id: string, data: UpdateProjectSchema) => {
     throw HttpException.Forbidden(
       "Forbidden: You are not allowed to update this project!"
     );
-  const updatedProject = await updateProjectQuery({
+  const updatedProject = await updateProjectQuery(id, {
     ...data,
     updatedAt: new Date(),
   });

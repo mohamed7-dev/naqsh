@@ -5,10 +5,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CreditCard, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useSession } from "../hooks/useSession";
 import { Loader } from "@/components/loaders/Loader";
@@ -18,8 +17,8 @@ function UserButton() {
   if (session.isLoading) return <Loader />;
   if (session.isUnAuthenticated || !session.data) return null;
 
-  const name = session.data?.user?.name!;
-  const image = session.data?.user?.image!;
+  const name = session?.data?.user?.name || "";
+  const image = session?.data?.user?.image || "";
 
   return (
     <DropdownMenu modal={false}>
@@ -33,11 +32,6 @@ function UserButton() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
-        <DropdownMenuItem className="h-10">
-          <CreditCard className="mr-2" />
-          Billing
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem className="h-10" onClick={() => signOut()}>
           <LogOut className="mr-2" />
           Log out

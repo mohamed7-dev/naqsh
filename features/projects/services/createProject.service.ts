@@ -3,7 +3,7 @@ import { insertProject } from "../db/project.query";
 import { CreateProjectSchema } from "../schema";
 
 const createProject = async (
-  data: Pick<CreateProjectSchema, "name" | "json" | "width" | "height">
+  data: Pick<CreateProjectSchema, "name" | "json">
 ) => {
   const user = await userOnly();
   const newProject = await insertProject({

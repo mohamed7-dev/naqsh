@@ -16,12 +16,14 @@ const ProjectError = ({
 }) => {
   React.useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error);
+    console.error(error.message);
   }, [error]);
   return (
     <main className="h-screen w-full flex flex-col gap-y-5 items-center justify-center">
       <TriangleAlert className="size-10 text-muted-foreground" />
-      <p className="text-muted-foreground text-sm">Failed to fetch project</p>
+      <p className="text-muted-foreground text-sm">
+        {error.message ? error.message : "Failed to fetch project"}
+      </p>
       <div className="flex items-center gap-2 flex-wrap">
         <Button asChild>
           <Link href={routes.landing}>Back to Home</Link>

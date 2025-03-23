@@ -1,3 +1,4 @@
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
@@ -19,16 +20,16 @@ const SidebarItem = ({
   onClick,
 }: SidebarItemProps) => {
   return (
-    <Link href={href} onClick={onClick}>
-      <div
-        className={cn(
-          "flex items-center px-3 py-3 rounded-xl bg-transparent hover:bg-white transition",
-          isActive && "bg-white"
-        )}
-      >
-        <Icon className="size-4 mr-2 stroke-2" />
-        <span className="text-sm font-medium">{label}</span>
-      </div>
+    <Link
+      href={href}
+      onClick={onClick}
+      className={cn(
+        buttonVariants({ variant: isActive ? "secondary" : "ghost" }),
+        "w-full justify-start"
+      )}
+    >
+      <Icon className="stroke-2" />
+      <span className="text-sm font-medium">{label}</span>
     </Link>
   );
 };

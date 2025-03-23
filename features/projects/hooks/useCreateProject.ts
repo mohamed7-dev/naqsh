@@ -1,4 +1,5 @@
 import { honoClient } from "@/lib/hono";
+import { queryKeys } from "@/lib/queryKeys";
 import { ErrorResponse } from "@/types/Utils";
 import {
   MutationOptions,
@@ -15,11 +16,9 @@ type RequestType = InferRequestType<
 >["json"];
 
 export const useCreateProject = (
-  options: MutationOptions<ResponseType, ErrorResponse, RequestType>
+  options?: MutationOptions<ResponseType, ErrorResponse, RequestType>
 ) => {
-  const { onSuccess, ...rest } = options;
   const queryClient = useQueryClient();
-
   return useMutation<ResponseType, ErrorResponse, RequestType>({
     mutationFn: async (json) => {
       const response = await honoClient.api.projects.$post({ json });
@@ -28,9 +27,9 @@ export const useCreateProject = (
       return data;
     },
     onSuccess: (...props) => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-      onSuccess?.(...props);
+      queryClient.invalidateQueries({ queryKey: queryKeys.getProjects });
+      options?.onSuccess?.(...props);
     },
-    ...rest,
+    ...options,
   });
 };

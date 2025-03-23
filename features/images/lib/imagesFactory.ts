@@ -1,5 +1,5 @@
-import { addToCanvas, getWorkspace } from "@/features/editor/lib/utils";
-import { Canvas, FabricImage, Image } from "fabric";
+import { addToCanvas } from "@/features/editor/lib/utils";
+import { Canvas, FabricImage } from "fabric";
 import { createFilter } from "./filters";
 
 type ImagesFactoryProps = {
@@ -10,9 +10,8 @@ const imagesFactory = (props: ImagesFactoryProps) => {
   return {
     addImage: (url: string) => {
       FabricImage.fromURL(url, { crossOrigin: "anonymous" }).then((image) => {
-        const workspace = getWorkspace(canvas);
-        image.scaleToWidth(workspace?.width || 0);
-        image.scaleToHeight(workspace?.height || 0);
+        image.scaleToWidth(canvas?.width / 1.2 || 0);
+        image.scaleToHeight(canvas?.height / 1.2 || 0);
         addToCanvas(canvas, image);
       });
     },
@@ -20,13 +19,14 @@ const imagesFactory = (props: ImagesFactoryProps) => {
       const objects = canvas.getActiveObjects();
       objects.forEach((object) => {
         if (object.type === "image") {
-          const imageObject = object as Image;
+          object.dirty = true;
+          const imageObject = object as FabricImage;
           const effect = createFilter(value);
           imageObject.filters = effect ? [effect] : [];
           imageObject.applyFilters();
-          canvas.renderAll();
         }
       });
+      canvas.renderAll();
     },
   };
 };

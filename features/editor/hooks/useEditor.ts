@@ -1,16 +1,12 @@
 "use client";
 import React from "react";
-import { Rect, Canvas, Shadow, FabricObject } from "fabric";
+import { Canvas, FabricObject } from "fabric";
 import { CANVAS_PROTOTYPE_CONFIG } from "@/config/canvas";
 import { textFactory } from "../lib/text";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { useAutoResize } from "./useAutoResize";
 import { FONT_FAMILY } from "../config/text";
-import {
-  FILL_COLOR,
-  WORKSPACE_HEIGHT,
-  WORKSPACE_WIDTH,
-} from "../config/common";
+import { FILL_COLOR } from "../config/common";
 import { Fonts, SaveCb } from "../Types";
 import { commonEditorFactory } from "../lib/common";
 import { shapeFactory } from "../lib/shape";
@@ -25,23 +21,12 @@ import { useWindowEvents } from "./useWindowEvents";
 import { useLoadState } from "./useLoadState";
 
 type UseEditorProps = {
-  onSelectionClearedCb?: () => void;
-  saveCb?: SaveCb;
+  saveCb: SaveCb;
   defaultJSON?: string;
-  defaultWidth?: number;
-  defaultHeight?: number;
 };
 const useEditor = (props: UseEditorProps) => {
-  const {
-    onSelectionClearedCb,
-    saveCb,
-    defaultHeight,
-    defaultJSON,
-    defaultWidth,
-  } = props;
+  const { saveCb, defaultJSON } = props;
   const initialState = React.useRef(defaultJSON);
-  const initialWidth = React.useRef(defaultWidth);
-  const initialHeight = React.useRef(defaultHeight);
   const [canvas, setCanvas] = React.useState<Canvas | null>(null);
   const [container, setContainer] = React.useState<HTMLElement | null>(null);
   const [selectedObjects, setSelectedObjects] = React.useState<FabricObject[]>(
@@ -55,7 +40,7 @@ const useEditor = (props: UseEditorProps) => {
     React.useState<number[]>(STROKE_DASH_ARRAY);
 
   // initialize history
-  const history = useHistory({ canvas: canvas, saveCb });
+  const history = useHistory({ canvas: canvas });
 
   // listen to events
   const onSelectionCreated = (objects: FabricObject[]) => {
@@ -67,7 +52,7 @@ const useEditor = (props: UseEditorProps) => {
   const onSelectionCleared = () => {
     setSelectedObjects([]);
     // this should close the sidebar
-    onSelectionClearedCb?.();
+    // onSelectionClearedCb?.();
   };
   useCanvasEvents({
     canvas,
@@ -78,31 +63,35 @@ const useEditor = (props: UseEditorProps) => {
   });
 
   // change zooming when resizing the viewport
-  const { autoZoom } = useAutoResize({ canvas, container });
+  const { autoZoom, scrollToContent, showScrollButton } = useAutoResize({
+    canvas,
+    container,
+  });
 
   // initialize clipboard
   const { copyObject, pasteObject } = useClipboard({ canvas: canvas });
 
   // listen to hotkeys
+  // const json = canvas?.toJSON();
   useHotkeys({
     canvas,
     undo: history.undo,
     redo: history.redo,
-    save: history.save,
+    save: saveCb,
     copy: copyObject,
     paste: pasteObject,
+    recentJSON: history.history.current.at(-1)!,
+    resetHistory: history.resetHistory,
   });
   // listen to window events
   useWindowEvents();
 
   // load initial state
-  // useLoadState({
-  //   canvas,
-  //   autoZoom,
-  //   initialState,
-  //   canvasHistory: history.history,
-  //   setHistoryIndex: history.setHistoryIndex,
-  // });
+  useLoadState({
+    canvas,
+    autoZoom,
+    initialState,
+  });
   const editor = React.useMemo(() => {
     if (canvas) {
       return {
@@ -111,6 +100,8 @@ const useEditor = (props: UseEditorProps) => {
         selectedObjects,
         workspace: getWorkspace(canvas),
         autoZoom,
+        scrollToContent,
+        showScrollButton,
         copyObject,
         pasteObject,
         ...exportFactory({ canvas, autoZoom }),
@@ -125,6 +116,7 @@ const useEditor = (props: UseEditorProps) => {
           setStrokeWidth,
           strokeDashArray,
           setStrokeDashArray,
+          save: history.save,
         }),
         ...textFactory({
           canvas,
@@ -162,51 +154,28 @@ const useEditor = (props: UseEditorProps) => {
     pasteObject,
     autoZoom,
     history,
+    scrollToContent,
+    showScrollButton,
   ]);
 
-  const initializeHistory = React.useMemo(
-    () => history.initializeHistory,
-    [history]
-  );
   const init = React.useCallback(
     ({
       initialCanvas,
       initialContainer,
     }: {
       initialCanvas: Canvas;
-      initialContainer: HTMLElement;
+      initialContainer: HTMLElement | null;
     }) => {
+      if (!initialContainer) return;
       FabricObject.prototype.set(CANVAS_PROTOTYPE_CONFIG);
-
-      const initialWorkspace = new Rect({
-        width: initialWidth.current || WORKSPACE_WIDTH,
-        height: initialHeight.current || WORKSPACE_HEIGHT,
-        name: "clip",
-        fill: "white",
-        selectable: false,
-        hasControls: false,
-        shadow: new Shadow({
-          color: "rgba(0,0,0,0.8)",
-          blur: 5,
-        }),
-      });
       initialCanvas.setDimensions({
-        width: initialContainer.offsetWidth,
-        height: initialContainer.offsetHeight,
+        width: initialContainer.clientWidth,
+        height: initialContainer.clientHeight,
       });
-
-      initialCanvas.add(initialWorkspace);
-      initialCanvas.centerObject(initialWorkspace);
-      initialCanvas.clipPath = initialWorkspace;
-
-      // initialize the history
-      initializeHistory(initialCanvas);
-
-      // set canvas, container globally
       setCanvas(initialCanvas);
       setContainer(initialContainer);
     },
-    [setCanvas, setContainer, initializeHistory]
+    [setCanvas]
   );
 
   return { init, editor };

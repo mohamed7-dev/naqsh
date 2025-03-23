@@ -1,7 +1,7 @@
 import { FILL_COLOR } from "./common";
 
-const STROKE_COLOR = "rgba(0,0,0,1)";
-const STROKE_WIDTH = 2;
+const STROKE_COLOR = "yellow";
+const STROKE_WIDTH = 4;
 const STROKE_DASH_ARRAY: number[] | [] = [];
 
 const CIRCLE_OPTIONS = {

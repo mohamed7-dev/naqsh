@@ -20,4 +20,6 @@ const COMMON_METADATA: Metadata = {
   },
 };
 
-export { APP_NAME, COMMON_METADATA };
+const DEFAULT_LIMIT = 10;
+
+export { APP_NAME, COMMON_METADATA, DEFAULT_LIMIT };

@@ -4,7 +4,7 @@ import React from "react";
 function ProjectLoading() {
   return (
     <main className="w-full h-screen flex items-center justify-center">
-      <Loader size={30} />;
+      <Loader size={30} />
     </main>
   );
 }

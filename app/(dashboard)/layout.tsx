@@ -7,7 +7,7 @@ type DashboardLayoutProps = {
 };
 function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="bg-muted h-screen flex gap-4">
+    <div className="bg-background h-screen flex gap-4">
       <aside className="hidden lg:block w-[20rem] h-full px-2">
         <Sidebar />
       </aside>
@@ -15,7 +15,7 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
         <header className="h-[4rem] w-full p-4">
           <Header />
         </header>
-        <main className="bg-white flex-1 overflow-hidden p-8 lg:rounded-tl-2xl">
+        <main className="bg-muted flex-1 overflow-scroll p-8 lg:rounded-tl-2xl">
           {children}
         </main>
       </div>

@@ -8,22 +8,15 @@ type LoadingButtonProps = CustomButtonProps & {
   loaderSize?: number;
 };
 function LoadingButton(props: LoadingButtonProps) {
-  const {
-    loading,
-    loaderColor = "#001",
-    loaderSize = 4,
-    children,
-    ...rest
-  } = props;
+  const { loading, loaderSize = 4, children, ...rest } = props;
   return (
     <Button {...rest}>
       {loading && (
         <LoaderIcon
-          className="animate-spin"
+          className="animate-spin text-primary"
           style={{
             width: loaderSize,
             height: loaderSize,
-            color: loaderColor,
           }}
         />
       )}

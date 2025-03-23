@@ -1,5 +1,4 @@
 import { Canvas, FabricObject } from "fabric";
-import { getWorkspace } from "./utils";
 import { MIN_ZOOM_OUT, ZOOM_RATIO } from "../config/common";
 
 type CommonEditorFactoryProps = {
@@ -11,11 +10,14 @@ type CommonEditorFactoryProps = {
   save: (trackChangesInHistory?: boolean) => void;
 };
 const commonEditorFactory = (props: CommonEditorFactoryProps) => {
-  const { canvas, selectedObjects, fillColor, setFillColor, autoZoom, save } =
-    props;
+  const { canvas, selectedObjects, fillColor, setFillColor, save } = props;
   return {
     delete: () => {
-      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
+      canvas.requestRenderAll();
+      canvas.getActiveObjects().forEach((object) => {
+        object.dirty = true;
+        canvas.remove(object);
+      });
       canvas.discardActiveObject();
       canvas.renderAll();
     },
@@ -26,30 +28,34 @@ const commonEditorFactory = (props: CommonEditorFactoryProps) => {
       return value as number;
     },
     changeOpacity: (value: number) => {
+      canvas.requestRenderAll();
       canvas.getActiveObjects().forEach((object) => {
+        object.dirty = true;
         object.set({ opacity: value });
       });
       canvas.renderAll();
     },
     bringForward: () => {
+      canvas.requestRenderAll();
       canvas.getActiveObjects().forEach((object) => {
+        object.dirty = true;
         canvas.bringObjectForward(object);
       });
       canvas.renderAll();
-      const workspace = getWorkspace(canvas);
-      if (workspace) canvas.sendObjectBackwards(workspace);
     },
     sendBackwards: () => {
+      canvas.requestRenderAll();
       canvas.getActiveObjects().forEach((object) => {
+        object.dirty = true;
         canvas.sendObjectBackwards(object);
       });
       canvas.renderAll();
-      const workspace = getWorkspace(canvas);
-      if (workspace) canvas.sendObjectBackwards(workspace);
     },
     changeFillColor: (value: string) => {
+      canvas.requestRenderAll();
       setFillColor(value);
       canvas.getActiveObjects().forEach((object) => {
+        object.dirty = true;
         object.set({ fill: value });
       });
       canvas.renderAll();
@@ -62,24 +68,28 @@ const commonEditorFactory = (props: CommonEditorFactoryProps) => {
       return value as string;
     },
     changeWorkspaceSize: (value: { width: number; height: number }) => {
-      const workspace = getWorkspace(canvas);
-      workspace?.set(value);
-      autoZoom();
+      // const workspace = getWorkspace(canvas);
+      canvas?.set(value);
+      // autoZoom();
       // save changes into history
       save();
     },
-    changeWorkspaceBackground: (value: string) => {
-      const workspace = getWorkspace(canvas);
-      workspace?.set({ fill: value });
+    changeWorkspaceBackground: async (value: string) => {
+      // canvas?.set({ fill: value });
+      canvas.set({ backgroundColor: value });
       canvas.renderAll();
       // save changes into history
       save();
+    },
+    getWorkspaceBackground: () => {
+      return canvas.backgroundColor;
     },
     zoomIn: () => {
       let zoomRatio = canvas.getZoom();
       zoomRatio += ZOOM_RATIO;
       const center = canvas.getCenterPoint();
       canvas.zoomToPoint(center, zoomRatio);
+      canvas.requestRenderAll();
       // save changes into history
       save();
     },
@@ -91,8 +101,20 @@ const commonEditorFactory = (props: CommonEditorFactoryProps) => {
         center,
         zoomRatio < MIN_ZOOM_OUT ? MIN_ZOOM_OUT : zoomRatio
       );
+      canvas.requestRenderAll();
       // save changes into history
       save();
+    },
+    resetZoom: () => {
+      const center = canvas.getCenterPoint();
+      canvas.zoomToPoint(center, 1);
+      canvas.requestRenderAll();
+      // save changes into history
+      save();
+    },
+    resetCanvas: () => {
+      canvas.clear();
+      canvas.requestRenderAll();
     },
   };
 };

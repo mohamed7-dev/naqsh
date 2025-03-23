@@ -1,14 +1,17 @@
 "use client";
-import { ActiveSelection, Canvas, FabricObject } from "fabric";
+import { ActiveSelection, Canvas } from "fabric";
 import { useEvent } from "react-use";
+import { SaveCb } from "../Types";
 
 type UseHotkeysProps = {
   canvas: Canvas | null;
   undo: () => void;
   redo: () => void;
-  save: (trackChangesInHistory?: boolean) => void;
+  save: SaveCb;
+  recentJSON: string;
   copy: () => void;
   paste: () => void;
+  resetHistory: () => void;
 };
 
 const useHotkeys = ({
@@ -18,8 +21,10 @@ const useHotkeys = ({
   save,
   copy,
   paste,
+  recentJSON,
+  resetHistory,
 }: UseHotkeysProps) => {
-  useEvent("keydown", (event) => {
+  useEvent("keydown", async (event) => {
     const isCtrlKey = event.ctrlKey || event.metaKey;
     const isDeleteKey = event.key === "Delete";
     const isInput = ["INPUT", "TEXTAREA"].includes(
@@ -55,19 +60,14 @@ const useHotkeys = ({
 
     if (isCtrlKey && event.key === "s") {
       event.preventDefault();
-      save(true);
+      await save({ json: recentJSON }).then(() => resetHistory());
     }
 
     if (isCtrlKey && event.key === "a") {
       canvas?.discardActiveObject();
-
       const allObjects = canvas
         ?.getObjects()
-        .filter(
-          (object) =>
-            (object as FabricObject & { name: string }).name !== "clip" &&
-            object.selectable
-        );
+        .filter((object) => object.selectable);
       canvas?.setActiveObject(new ActiveSelection(allObjects, { canvas }));
       canvas?.renderAll();
     }

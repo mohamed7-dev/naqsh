@@ -4,6 +4,7 @@ import React from "react";
 import { BANNER_DESC, BANNER_HEADER } from "../data/messages";
 import { useCreateProject } from "@/features/projects/hooks/useCreateProject";
 import {
+  DEFAULT_PROJECT_NAME,
   WORKSPACE_HEIGHT,
   WORKSPACE_WIDTH,
 } from "@/features/editor/config/common";
@@ -34,7 +35,7 @@ function Banner() {
     await createProject({
       width: WORKSPACE_WIDTH,
       height: WORKSPACE_HEIGHT,
-      name: "untitled-workspace",
+      name: DEFAULT_PROJECT_NAME,
       json: "",
     });
   };

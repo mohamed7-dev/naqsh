@@ -14,7 +14,7 @@ type ResponseType = InferResponseType<
 >;
 type RequestType = InferRequestType<
   (typeof honoClient.api.projects)[":id"]["$patch"]
->["json"];
+>;
 
 const useUpdateProject = (
   id: string,
@@ -23,10 +23,10 @@ const useUpdateProject = (
   const queryClient = useQueryClient();
   return useMutation<ResponseType, ErrorResponse, RequestType>({
     mutationKey: queryKeys.getProject(id),
-    mutationFn: async (json) => {
+    mutationFn: async (info) => {
       const response = await honoClient.api.projects[":id"].$patch({
-        json,
-        param: { id },
+        json: info.json,
+        param: info.param,
       });
       const data = await response.json();
       if ("error" in data) throw data;
@@ -35,6 +35,9 @@ const useUpdateProject = (
     onSuccess: async (...props) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.getProject(id),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.getProjects,
       });
       options?.onSuccess?.(...props);
     },

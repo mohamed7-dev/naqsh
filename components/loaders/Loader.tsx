@@ -4,24 +4,17 @@ import React from "react";
 
 type LoaderProps = {
   size?: number;
-  color?: string;
   containerClassName?: string;
 };
 function Loader(props: LoaderProps) {
-  const { size = 10, color = "#001", containerClassName } = props;
+  const { size = 10, containerClassName } = props;
   return (
-    <div
-      className={cn(
-        "flex items-center justify-center flex-1",
-        containerClassName
-      )}
-    >
+    <div className={cn("flex items-center justify-center", containerClassName)}>
       <Loader2
-        className="animate-spin"
+        className="animate-spin text-primary"
         style={{
           width: size,
           height: size,
-          color: color,
         }}
       />
       <span className="sr-only">Loading</span>

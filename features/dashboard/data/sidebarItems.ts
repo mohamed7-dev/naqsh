@@ -1,5 +1,5 @@
 import { routes } from "@/config/routes";
-import { CreditCard, Home } from "lucide-react";
+import { Home } from "lucide-react";
 
 const sidebarItems = {
   firstGroup: [
@@ -10,12 +10,7 @@ const sidebarItems = {
       isActive: (pathname: string) => pathname === routes.landing,
     },
   ],
-  secondGroup: [
-    {
-      title: "Biling",
-      Icon: CreditCard,
-    },
-  ],
+  secondGroup: [],
 };
 
 export { sidebarItems };

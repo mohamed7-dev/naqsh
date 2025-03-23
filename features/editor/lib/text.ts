@@ -45,6 +45,7 @@ const textFactory = (props: TextFactoryProps) => {
     changeLinethrough: (linethrough: boolean) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ linethrough });
         }
       });
@@ -60,6 +61,7 @@ const textFactory = (props: TextFactoryProps) => {
     changeFontUnderline: (value: boolean) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ underline: value });
         }
       });
@@ -76,6 +78,7 @@ const textFactory = (props: TextFactoryProps) => {
     changeFontStyle: (value: FontStyle) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ fontStyle: value });
         }
       });
@@ -92,6 +95,7 @@ const textFactory = (props: TextFactoryProps) => {
     changeFontWeight: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ fontWeight: value });
         }
       });
@@ -108,6 +112,7 @@ const textFactory = (props: TextFactoryProps) => {
     changeTextAlign: (value: TextAlign) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ textAlign: value });
         }
       });
@@ -124,6 +129,7 @@ const textFactory = (props: TextFactoryProps) => {
     changeFontSize: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ fontSize: value });
         }
       });
@@ -141,6 +147,7 @@ const textFactory = (props: TextFactoryProps) => {
       setFontFamily(value);
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
+          object.dirty = true;
           object.set({ fontFamily: value });
         }
       });
@@ -155,7 +162,7 @@ const textFactory = (props: TextFactoryProps) => {
     enableDrawingMode: () => {
       canvas.discardActiveObject();
       canvas.freeDrawingBrush = new PencilBrush(canvas);
-      canvas.renderAll();
+      // canvas.renderAll();
       canvas.isDrawingMode = true;
       if (canvas.freeDrawingBrush) {
         canvas.freeDrawingBrush.width = strokeWidth;

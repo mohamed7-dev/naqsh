@@ -1,6 +1,7 @@
 const commonRoutes = {
   loginRedirectTo: "/",
   authPrefix: "/auth",
+  logoutRedirectTo: "/",
 };
 
 /**

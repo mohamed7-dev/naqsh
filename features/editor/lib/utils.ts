@@ -1,4 +1,5 @@
 import { Canvas, FabricObject } from "fabric";
+import { DEFAULT_IMAGE_NAME } from "../config/common";
 
 const getWorkspace = (canvas: Canvas) => {
   return canvas
@@ -8,27 +9,51 @@ const getWorkspace = (canvas: Canvas) => {
     );
 };
 
+const scrollToContent = (canvas: Canvas) => {
+  canvas.getObjects().forEach();
+};
+
 const centeralizeObject = (canvas: Canvas, object: FabricObject) => {
-  const workspace = getWorkspace(canvas);
-  const center = workspace?.getCenterPoint();
-  if (!center) return;
-  canvas._centerObject(object, center);
+  // const workspace = getWorkspace(canvas);
+  // const center = canvas?.getCenterPoint();
+  // if (!center) return;
+  canvas.centerObject(object);
 };
 
 const addToCanvas = (canvas: Canvas, object: FabricObject) => {
+  object.dirty = true;
   centeralizeObject(canvas, object);
   canvas.add(object);
   canvas.setActiveObject(object);
+  canvas.renderAll();
+  object.dirty = false;
 };
 
 const isTextType = (type: string | undefined) => {
   return type === "text" || type === "i-text" || type === "textbox";
 };
 
-const downloadFile = (file: string, type: string) => {
+const isShapeType = (type: string | undefined) => {
+  return (
+    type === "circle" ||
+    type === "rect" ||
+    type === "triangle" ||
+    type === "polygon"
+  );
+};
+
+const downloadFile = ({
+  dataURL,
+  ext,
+  name,
+}: {
+  dataURL: string;
+  ext: string;
+  name?: string;
+}) => {
   const anchorElement = document.createElement("a");
-  anchorElement.href = file;
-  anchorElement.download = `${Math.round(Math.random() * 5)}.${type}`;
+  anchorElement.href = dataURL;
+  anchorElement.download = `${name || DEFAULT_IMAGE_NAME}.${ext}`;
   document.body.appendChild(anchorElement);
   anchorElement.click();
   anchorElement.remove();
@@ -53,4 +78,5 @@ export {
   isTextType,
   downloadFile,
   transformText,
+  isShapeType,
 };

@@ -17,6 +17,7 @@ type ShapeFactoryProps = {
   setStrokeWidth: (width: number) => void;
   strokeDashArray: number[];
   setStrokeDashArray: (array: number[]) => void;
+  save?: () => void;
 };
 const shapeFactory = (props: ShapeFactoryProps) => {
   const {
@@ -29,6 +30,7 @@ const shapeFactory = (props: ShapeFactoryProps) => {
     setStrokeWidth,
     strokeDashArray,
     setStrokeDashArray,
+    save,
   } = props;
   return {
     addCircle: () => {
@@ -38,7 +40,11 @@ const shapeFactory = (props: ShapeFactoryProps) => {
         stroke: strokeColor,
         strokeWidth: strokeWidth,
         strokeDashArray: strokeDashArray,
+        left: canvas.width * 0.5,
+        top: canvas.height * 0.5,
       });
+      circle.left = circle.left / canvas.width;
+      circle.top = circle.top / canvas.height;
       addToCanvas(canvas, circle);
       return circle;
     },
@@ -162,6 +168,42 @@ const shapeFactory = (props: ShapeFactoryProps) => {
       if (!selectedObject) return strokeDashArray;
       const value = selectedObject.get("strokeDashArray") || strokeDashArray;
       return value as number[];
+    },
+    addClipRect: () => {
+      const rect = new Rect({
+        ...RECTANGLE_OPTIONS,
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth: strokeWidth,
+        strokeDashArray: strokeDashArray,
+        name: "Clip",
+        width: canvas.width / 2,
+        height: canvas.height / 2,
+      });
+      canvas.clipPath = rect;
+      addToCanvas(canvas, rect);
+    },
+    getClip: () => {
+      const clip = canvas
+        .getObjects()
+        .find(
+          (object) =>
+            (object as FabricObject & { name: "Clip" }).name === "Clip"
+        );
+      return clip;
+    },
+    changeClipSize: (value: { width: number; height: number }) => {
+      const clip = canvas
+        .getObjects()
+        .find(
+          (object) =>
+            (object as FabricObject & { name: "Clip" }).name === "Clip"
+        );
+      if (clip) {
+        clip?.set(value);
+      }
+      // autoZoom();
+      save?.();
     },
   };
 };
