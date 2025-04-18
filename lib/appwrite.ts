@@ -6,20 +6,15 @@ const uploadFile = async (file: File) => {
 };
 
 const previewFullImage = (fileId: string) => {
-  return storage.getFilePreview(APPWRITE.storageId, fileId);
+  return storage.getFileView(APPWRITE.storageId, fileId);
 };
 
-const previewCardImage = (fileId: string, width?: number, height?: number) => {
-  return storage.getFilePreview(
-    APPWRITE.storageId,
-    fileId,
-    width || 1000,
-    height || 1000
-  );
+const previewCardImage = (fileId: string) => {
+  return storage.getFileView(APPWRITE.storageId, fileId);
 };
 
 const previewAvatar = (fileId: string) => {
-  return storage.getFilePreview(APPWRITE.storageId, fileId, 500, 500);
+  return storage.getFileView(APPWRITE.storageId, fileId);
 };
 
 export { uploadFile, previewFullImage, previewAvatar, previewCardImage };
