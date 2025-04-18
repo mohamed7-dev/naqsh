@@ -1,11 +1,14 @@
 import React from "react";
-import { Project } from "../../projects/Types";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Crown } from "lucide-react";
 import { previewCardImage } from "@/lib/appwrite";
+import { GetProjectRes } from "@/features/projects/Types";
 
-type TemplateCardProps = Pick<Project, "name" | "isPro" | "thumbnailFileId"> & {
+type TemplateCardProps = Pick<
+  GetProjectRes["data"],
+  "name" | "isPro" | "thumbnailFileId"
+> & {
   onClick: () => void;
   disabled?: boolean;
 };

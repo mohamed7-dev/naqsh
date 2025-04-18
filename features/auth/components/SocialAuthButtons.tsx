@@ -1,32 +1,36 @@
 "use client";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { signIn } from "next-auth/react";
 import { commonRoutes } from "@/config/routes";
+import { LoadingButton } from "@/components/LoadingButton";
 
 type SocialAuthButtonsProps = {
   redirectTo?: string;
 };
 function SocialAuthButtons(props: SocialAuthButtonsProps) {
   const { redirectTo } = props;
-  const handleSocialAuth = async (provider: "google") => {
-    await signIn(provider, {
-      redirectTo: redirectTo ? redirectTo : commonRoutes.loginRedirectTo,
+  const [isLoading, startTransition] = React.useTransition();
+  const handleSocialAuth = (provider: "google") => {
+    startTransition(async () => {
+      await signIn(provider, {
+        redirectTo: redirectTo ? redirectTo : commonRoutes.loginRedirectTo,
+      });
     });
   };
   return (
-    <>
-      <Button
-        variant={"secondary"}
-        size={"lg"}
-        className="gap-2 w-full [&_svg]:size-6"
-        onClick={() => handleSocialAuth("google")}
-      >
-        <Icons.google />
-        Continue with google
-      </Button>
-    </>
+    <LoadingButton
+      loaderSize={15}
+      loading={isLoading}
+      disabled={isLoading}
+      variant={"secondary"}
+      size={"lg"}
+      className="gap-2 w-full [&_svg]:size-4"
+      onClick={() => handleSocialAuth("google")}
+    >
+      <Icons.google />
+      <span>Continue with google</span>
+    </LoadingButton>
   );
 }
 

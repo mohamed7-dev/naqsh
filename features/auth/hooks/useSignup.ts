@@ -17,9 +17,6 @@ const useSignup = (
       const res = await honoClient.api.users.register.$post({
         json: credentials,
       });
-      // if (!res.ok) {
-      //   throw new Error("Something went wrong");
-      // }
       const data = await res.json();
       if ("error" in data) throw data;
       return data;

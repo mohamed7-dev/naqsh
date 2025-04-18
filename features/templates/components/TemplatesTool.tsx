@@ -8,6 +8,7 @@ import { Loader } from "@/components/loaders/Loader";
 import { EditorItemProps } from "@/features/editor/Types";
 import Image from "next/image";
 import { previewCardImage } from "@/lib/appwrite";
+import { GetTemplatesRes } from "../Types";
 
 type ImagesProps = {
   onActionCb?: () => void;
@@ -15,7 +16,9 @@ type ImagesProps = {
 
 function TemplatesTool({ onActionCb, editor }: ImagesProps) {
   const { data, isLoading, isError, error } = useGetTemplates();
-  const templates = data?.pages.map((page) => page.data).flat();
+  const templates = data?.pages
+    .map((page) => page?.data as GetTemplatesRes["data"])
+    .flat();
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure?",
     "Selecting template will replace your current project!"

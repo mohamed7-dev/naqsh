@@ -6,7 +6,7 @@ import type { Tools, Tools as ToolsType } from "../Types";
 import { useUpdateProject } from "@/features/projects/hooks/useUpdateProject";
 import { toast } from "sonner";
 import { ErrorResponse } from "@/types/Utils";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ToolSettings } from "./tool-settings/ToolSettings";
 import { EditorSettings } from "./editor-settings/EditorSettings";
 import { EditorToolbar } from "./toolbar/EditorToolbar";
@@ -17,23 +17,16 @@ import { UndoRedo } from "./editor-settings/UndoRedo";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { useConfirm } from "@/hooks/useConfirm";
-import {
-  ResponseType,
-  useGetProjectById,
-} from "@/features/projects/hooks/useGetProjectById";
+import { GetProjectRes } from "@/features/projects/Types";
 
 type EditorProps = {
-  initialData: ResponseType;
+  project: GetProjectRes["data"];
 };
-function Editor(props: EditorProps) {
-  const { initialData } = props;
+function Editor({ project }: EditorProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const containerRef = React.useRef<HTMLElement>(null);
   const [activeTool, setActiveTool] = React.useState<ToolsType>("Select");
   const router = useRouter();
-  const params = useParams<{ projectId: string }>();
-  const { data } = useGetProjectById(params.projectId, initialData);
-  const project = data.data;
   const [ConfirmDialog, enterClippingMode] = useConfirm(
     "Are you sure?",
     "Entering clipping mode will enclose your current work in a box?"
@@ -196,7 +189,7 @@ function Editor(props: EditorProps) {
         <section
           aria-label="canvas"
           ref={containerRef}
-          className="w-full h-full"
+          className="w-full h-full overflow-auto"
         >
           <canvas ref={canvasRef} />
         </section>

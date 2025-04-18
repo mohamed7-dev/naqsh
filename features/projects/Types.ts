@@ -1,9 +1,12 @@
-import { SelectProject, SelectUser } from "@/db/Types";
+import { honoClient } from "@/lib/hono";
+import { InferResponseType } from "hono";
 
-type Project = Omit<SelectProject, "creator" | "createdAt" | "updatedAt"> & {
-  creator: Pick<SelectUser, "id" | "email" | "name" | "image">;
-  createdAt: string;
-  updatedAt: string;
-};
+type GetProjectRes = InferResponseType<
+  (typeof honoClient.api.projects)[":id"]["$get"]
+>;
 
-export type { Project };
+type GetProjectsRes = InferResponseType<
+  (typeof honoClient.api.projects)["$get"]
+>;
+
+export type { GetProjectRes, GetProjectsRes };

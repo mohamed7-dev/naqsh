@@ -22,7 +22,7 @@ const useUpdateProject = (
 ) => {
   const queryClient = useQueryClient();
   return useMutation<ResponseType, ErrorResponse, RequestType>({
-    mutationKey: queryKeys.getProject(id),
+    mutationKey: queryKeys.updateProjectMutation(id),
     mutationFn: async (info) => {
       const response = await honoClient.api.projects[":id"].$patch({
         json: info.json,
@@ -32,13 +32,8 @@ const useUpdateProject = (
       if ("error" in data) throw data;
       return data;
     },
-    onSuccess: async (...props) => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.getProject(id),
-      });
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.getProjects,
-      });
+    onSuccess: (...props) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.getProjects });
       options?.onSuccess?.(...props);
     },
     ...options,
@@ -48,7 +43,7 @@ const useUpdateProject = (
 const useUpdateProjectStatus = (id: string) => {
   const data = useMutationState({
     filters: {
-      mutationKey: queryKeys.getProject(id),
+      mutationKey: queryKeys.updateProjectMutation(id),
       exact: true,
     },
     select: (mutation) => mutation.state.status,

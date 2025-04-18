@@ -1,18 +1,19 @@
 "use client";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "next-auth/react";
-import { commonRoutes } from "@/config/routes";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { LoadingButton } from "@/components/LoadingButton";
+import { useLogin } from "../hooks/useLogin";
 
 function LoginForm() {
   const searchParams = useSearchParams();
   const from = searchParams.get("from");
   const error = searchParams.get("error");
+
+  const { mutateAsync: login, isPending } = useLogin();
 
   const [form, setForm] = React.useState<{
     password: string;
@@ -29,17 +30,14 @@ function LoginForm() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await signIn("credentials", {
-      email: form.email,
-      password: form.password,
-      redirectTo: from ? from : commonRoutes.loginRedirectTo,
-    }).then(() => {
+    await login({ credentials: form, from }).then(() => {
       toast.success("Successfull Login", {
         description: "Logged in Successfully!",
         duration: 3000,
       });
     });
   };
+
   return (
     <>
       {!!error && (
@@ -71,9 +69,15 @@ function LoginForm() {
             type="password"
           />
         </div>
-        <Button type="submit" className="w-full" size="lg">
+        <LoadingButton
+          loading={isPending}
+          disabled={isPending}
+          type="submit"
+          className="w-full"
+          size="lg"
+        >
           Login
-        </Button>
+        </LoadingButton>
       </form>
     </>
   );

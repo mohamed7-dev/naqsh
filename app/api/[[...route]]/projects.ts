@@ -34,7 +34,7 @@ const projects = new Hono()
         await userOnly();
         const parsedData = ctx.req.valid("json");
         const newProject = await createProject(parsedData);
-        revalidatePath(routes.landing);
+        revalidatePath(routes.landing, "page");
         return ctx.json(
           handleSuccessResponse({
             actionType: "Mutate",

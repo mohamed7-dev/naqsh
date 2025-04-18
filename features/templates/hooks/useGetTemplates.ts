@@ -2,13 +2,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { honoClient } from "@/lib/hono";
 import { queryKeys } from "@/lib/queryKeys";
 import { DEFAULT_LIMIT } from "@/config/app";
-import { InferResponseType } from "hono";
+import { GetTemplatesRes } from "../Types";
 
-export type GetTemplatesResponseType = InferResponseType<
-  typeof honoClient.api.projects.templates.$get
->;
-
-const useGetTemplates = () => {
+const useGetTemplates = (initialData?: GetTemplatesRes) => {
   return useInfiniteQuery({
     queryKey: queryKeys.getTemplates,
     queryFn: async ({ pageParam }) => {
@@ -23,7 +19,8 @@ const useGetTemplates = () => {
       return res;
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.nextParam,
+    getNextPageParam: (lastPage) => lastPage?.nextParam,
+    initialData: { pages: [initialData], pageParams: [0] },
   });
 };
 

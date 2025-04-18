@@ -29,7 +29,7 @@ const handleSuccessResponse = <T>({
     code,
     message,
     data,
-    ...(nextParam && { nextParam }),
+    ...(typeof nextParam !== "undefined" && { nextParam }),
     ...(total && { total }),
   } satisfies Res<T>;
 };

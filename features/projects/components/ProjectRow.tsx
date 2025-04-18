@@ -2,14 +2,14 @@
 import React from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { FileIcon } from "lucide-react";
-import { Project } from "../Types";
 import { useRouter } from "next/navigation";
 import { routes } from "@/config/routes";
 import { formatDistanceToNow } from "date-fns";
 import { ActionsCell } from "./ActionsCell";
+import { GetProjectRes } from "../Types";
 
 type ProjectRowProps = {
-  project: Omit<Project, "creator">;
+  project: Omit<GetProjectRes["data"], "creator">;
 };
 function ProjectRow({ project }: ProjectRowProps) {
   const router = useRouter();

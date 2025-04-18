@@ -8,16 +8,6 @@ const COMMON_METADATA: Metadata = {
     default: APP_NAME,
     template: `${APP_NAME}: %s`,
   },
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: APP_NAME,
-    // startUpImage: [],
-  },
-  formatDetection: {
-    telephone: false,
-  },
 };
 
 const DEFAULT_LIMIT = 10;

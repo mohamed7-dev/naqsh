@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-import {
-  GetTemplatesResponseType,
-  useGetTemplates,
-} from "../hooks/useGetTemplates";
+import { useGetTemplates } from "../hooks/useGetTemplates";
 import { useCreateProject } from "@/features/projects/hooks/useCreateProject";
 import { Loader } from "@/components/loaders/Loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -12,13 +9,19 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/config/routes";
 import { ErrorResponse } from "@/types/Utils";
 import { toast } from "sonner";
+import { GetTemplatesRes } from "../Types";
 
-function TemplatesSection() {
+type TemplatesSectionProps = {
+  initialData: GetTemplatesRes;
+};
+
+function TemplatesSection({ initialData }: TemplatesSectionProps) {
   const router = useRouter();
-  const { data, isLoading, isError, error } = useGetTemplates();
+  const { data, isLoading, isError, error } = useGetTemplates(initialData);
 
-  const templates = data?.pages.map((page) => page.data).flat() || [];
-
+  const templates =
+    data?.pages.map((page) => page?.data as GetTemplatesRes["data"]).flat() ||
+    [];
   // Create Project
   const onSuccess = (data: { data: { id: string }; message?: string }) => {
     toast.success("Success", {
@@ -35,7 +38,7 @@ function TemplatesSection() {
     useCreateProject({ onSuccess, onError });
 
   const onClick = React.useCallback(
-    async (template: GetTemplatesResponseType["data"][0]) => {
+    async (template: GetTemplatesRes["data"][0]) => {
       await createProject({
         name: `${template.name} project`,
         json: template.json,
@@ -60,7 +63,7 @@ function TemplatesSection() {
             <TemplateCard
               name={template.name}
               thumbnailFileId={template.thumbnailFileId || ""}
-              onClick={() => onClick(template)}
+              onClick={() => onClick(template!)}
               disabled={isCreating}
               isPro={template.isPro}
             />

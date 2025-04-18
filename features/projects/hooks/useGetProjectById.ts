@@ -10,7 +10,7 @@ export type RequestType = InferRequestType<
   (typeof honoClient.api.projects)[":id"]["$get"]
 >["param"];
 
-const useGetProjectById = (id: string, initialData: ResponseType) => {
+const useGetProjectById = (id: string) => {
   return useQuery({
     queryKey: queryKeys.getProject(id),
     queryFn: async () => {
@@ -23,8 +23,6 @@ const useGetProjectById = (id: string, initialData: ResponseType) => {
       if ("error" in data) throw data;
       return data;
     },
-    initialData: () => initialData,
-    enabled: !!id,
   });
 };
 

@@ -10,8 +10,12 @@ import { ProjectRow } from "./ProjectRow";
 import { useDuplicateProjectStatus } from "../hooks/useDuplicateProject";
 import { useDeleteProjectStatus } from "../hooks/useDeleteProject";
 import { cn } from "@/lib/utils";
+import { GetProjectsRes } from "../Types";
 
-function ProjectsSection() {
+type ProjectsSectionProps = {
+  initialData: GetProjectsRes;
+};
+function ProjectsSection({ initialData }: ProjectsSectionProps) {
   const {
     data,
     isPending,
@@ -20,8 +24,10 @@ function ProjectsSection() {
     isFetchingNextPage,
     hasNextPage,
     error,
-  } = useGetProjects();
-  const projects = data?.pages.map((page) => page.data).flat() || [];
+  } = useGetProjects(initialData);
+  const projects =
+    data?.pages.map((page) => page?.data as GetProjectsRes["data"]).flat() ||
+    [];
   const { isPending: isDuplicating } = useDuplicateProjectStatus();
   const { isPending: isDeleting } = useDeleteProjectStatus();
   return (
@@ -46,7 +52,7 @@ function ProjectsSection() {
           className={cn((isDuplicating || isDeleting) && "opacity-75")}
         >
           {projects?.map((project) => (
-            <ProjectRow key={project.id} project={project} />
+            <ProjectRow key={project.id} project={project!} />
           ))}
         </TableBody>
       </Table>

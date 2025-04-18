@@ -21,6 +21,7 @@ function Banner() {
     toast.success("Successfull Creation", {
       description: data.message,
     });
+    router.refresh();
     router.push(routes.projectEditor(data.data.id));
   };
   const { mutateAsync: createProject, isPending } = useCreateProject({

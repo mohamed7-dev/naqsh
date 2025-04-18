@@ -37,15 +37,12 @@ async function ProjectEditor(props: ProjectEditorProps) {
   return (
     <div className="min-h-screen flex flex-col">
       <Editor
-        initialData={{
-          ...project,
-          data: {
-            ...project.data,
-            createdAt: project.data.createdAt.toString(),
-            updatedAt: project.data.updatedAt.toString(),
-          },
+        project={{
+          ...project.data,
+          createdAt: project.data.createdAt.toString(),
+          updatedAt: project.data.updatedAt.toString(),
         }}
-        key={project.data.id}
+        key={params.projectId}
       />
     </div>
   );
